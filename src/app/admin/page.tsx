@@ -32,9 +32,12 @@ export default function AdminPage() {
   const [adminInfo, setAdminInfo] = useState<AdminInfo | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [floatingButtonImageUrl, setFloatingButtonImageUrl] = useState('')
+  const [characterImageUrl, setCharacterImageUrl] = useState('')
+  const [isEditingCharacter, setIsEditingCharacter] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [isUploadingCharacter, setIsUploadingCharacter] = useState(false)
 
   useEffect(() => {
     fetchAdminInfo()
@@ -55,6 +58,7 @@ export default function AdminPage() {
 
       setAdminInfo(data)
       setFloatingButtonImageUrl(data.floating_button_image_url || '')
+      setCharacterImageUrl(data.character_image_url || '')
     } catch (error) {
       console.error('管理人情報の取得中にエラーが発生しました:', error)
     } finally {
@@ -130,6 +134,74 @@ export default function AdminPage() {
     }
   }
 
+  const saveCharacterImage = async () => {
+    if (!adminInfo) return
+
+    setIsSaving(true)
+    try {
+      const { error } = await supabase
+        .from('admin_info')
+        .update({ character_image_url: characterImageUrl || null })
+        .eq('id', adminInfo.id)
+
+      if (error) {
+        console.error('保存エラー:', error)
+        alert('保存に失敗しました')
+        return
+      }
+
+      setAdminInfo({ ...adminInfo, character_image_url: characterImageUrl || null })
+      setIsEditingCharacter(false)
+      alert('保存しました')
+    } catch (error) {
+      console.error('保存中にエラーが発生しました:', error)
+      alert('保存に失敗しました')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const uploadCharacterImage = async (file: File) => {
+    setIsUploadingCharacter(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload-admin-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'アップロードに失敗しました')
+      }
+
+      if (adminInfo) {
+        setAdminInfo({ ...adminInfo, character_image_url: result.url })
+        setCharacterImageUrl(result.url)
+        alert('画像をアップロードしました')
+      }
+    } catch (error) {
+      console.error('アップロード中にエラーが発生しました:', error)
+      alert('アップロードに失敗しました')
+    } finally {
+      setIsUploadingCharacter(false)
+    }
+  }
+
+  const handleCharacterFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        uploadCharacterImage(file)
+      } else {
+        alert('画像ファイルを選択してください')
+      }
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-100 via-red-50 to-orange-200 flex items-center justify-center">
@@ -167,7 +239,7 @@ export default function AdminPage() {
             <div className="bg-gradient-to-r from-orange-500 to-red-500 p-8">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 {/* キャラクター画像 */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 relative">
                   {adminInfo.character_image_url ? (
                     <img
                       src={adminInfo.character_image_url}
@@ -181,6 +253,15 @@ export default function AdminPage() {
                       </span>
                     </div>
                   )}
+                  <button
+                    onClick={() => setIsEditingCharacter(true)}
+                    className="absolute -bottom-2 -right-2 bg-white text-orange-500 rounded-full p-2 shadow-lg hover:bg-orange-50 transition-colors"
+                    title="画像を編集"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
                 </div>
 
                 {/* 基本情報 */}
@@ -391,6 +472,67 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+
+      {/* キャラクター画像編集モーダル */}
+      {isEditingCharacter && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">管理人画像を編集</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  画像ファイルをアップロード:
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCharacterFileChange}
+                  disabled={isUploadingCharacter}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                />
+                {isUploadingCharacter && (
+                  <p className="text-sm text-orange-600 mt-1">アップロード中...</p>
+                )}
+              </div>
+              
+              <div className="text-center text-gray-500">または</div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  画像URL:
+                </label>
+                <input
+                  type="url"
+                  value={characterImageUrl}
+                  onChange={(e) => setCharacterImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <button
+                  onClick={() => {
+                    setIsEditingCharacter(false)
+                    setCharacterImageUrl(adminInfo.character_image_url || '')
+                  }}
+                  className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  キャンセル
+                </button>
+                <button
+                  onClick={saveCharacterImage}
+                  disabled={isSaving}
+                  className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50"
+                >
+                  {isSaving ? '保存中...' : '保存'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
