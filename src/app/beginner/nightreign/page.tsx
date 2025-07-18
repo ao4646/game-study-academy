@@ -254,7 +254,7 @@ export default async function NightreignBeginnerGuidePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/articles"
+                  href="/games/nightreign"
                   className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
                 >
                   📚 攻略記事を読む
@@ -421,7 +421,7 @@ export default async function NightreignBeginnerGuidePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/articles"
+                href="/games/nightreign"
                 className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
               >
                 📚 攻略記事を読む
