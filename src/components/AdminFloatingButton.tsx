@@ -62,7 +62,7 @@ export default function AdminFloatingButton() {
           <div className="relative w-[100px] h-[100px] md:w-[150px] md:h-[150px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
             {adminInfo.floating_button_image_url || adminInfo.character_image_url ? (
               <img
-                src={adminInfo.floating_button_image_url || adminInfo.character_image_url}
+                src={adminInfo.floating_button_image_url || adminInfo.character_image_url || ''}
                 alt={`管理人 ${adminInfo.display_name}`}
                 className="w-full h-full object-cover"
               />
