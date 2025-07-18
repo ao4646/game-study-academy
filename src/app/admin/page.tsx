@@ -32,8 +32,9 @@ export default function AdminPage() {
   const [adminInfo, setAdminInfo] = useState<AdminInfo | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [floatingButtonImageUrl, setFloatingButtonImageUrl] = useState('')
-  const [characterImageUrl, setCharacterImageUrl] = useState('')
-  const [isEditingCharacter, setIsEditingCharacter] = useState(false)
+  // 一時的に無効化
+  // const [characterImageUrl, setCharacterImageUrl] = useState('')
+  // const [isEditingCharacter, setIsEditingCharacter] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -58,7 +59,7 @@ export default function AdminPage() {
 
       setAdminInfo(data)
       setFloatingButtonImageUrl(data.floating_button_image_url || '')
-      setCharacterImageUrl(data.character_image_url || '')
+      // setCharacterImageUrl(data.character_image_url || '')
     } catch (error) {
       console.error('管理人情報の取得中にエラーが発生しました:', error)
     } finally {
@@ -134,6 +135,8 @@ export default function AdminPage() {
     }
   }
 
+  // 一時的に無効化
+  /*
   const saveCharacterImage = async () => {
     if (!adminInfo) return
 
@@ -201,6 +204,7 @@ export default function AdminPage() {
       }
     }
   }
+  */
 
   if (isLoading) {
     return (
@@ -253,7 +257,8 @@ export default function AdminPage() {
                       </span>
                     </div>
                   )}
-                  <button
+                  {/* 編集ボタン - 一時的に無効化 */}
+                  {/* <button
                     onClick={() => setIsEditingCharacter(true)}
                     className="absolute -bottom-2 -right-2 bg-white text-orange-500 rounded-full p-2 shadow-lg hover:bg-orange-50 transition-colors"
                     title="画像を編集"
@@ -261,7 +266,7 @@ export default function AdminPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* 基本情報 */}
@@ -345,105 +350,6 @@ export default function AdminPage() {
                 </div>
               </section>
 
-              {/* 浮動ボタン画像設定 */}
-              <section>
-                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-6 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
-                  浮動ボタン画像設定
-                </h3>
-                <div className="bg-gray-50 rounded-lg p-6">
-                  <div className="flex flex-col md:flex-row gap-6 items-start">
-                    {/* 現在の画像プレビュー */}
-                    <div className="flex-shrink-0">
-                      <p className="text-sm text-gray-600 mb-2">現在の浮動ボタン画像:</p>
-                      <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300">
-                        {adminInfo.floating_button_image_url || adminInfo.character_image_url ? (
-                          <img
-                            src={adminInfo.floating_button_image_url || adminInfo.character_image_url}
-                            alt="浮動ボタン画像"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-                            <span className="text-white text-lg font-bold">
-                              {adminInfo.display_name.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* 編集フォーム */}
-                    <div className="flex-1">
-                      {isEditing ? (
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              画像ファイルをアップロード:
-                            </label>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                              disabled={isUploading}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-                            />
-                            {isUploading && (
-                              <p className="text-sm text-orange-600 mt-1">アップロード中...</p>
-                            )}
-                          </div>
-                          <div className="text-center text-gray-500">または</div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              画像URL:
-                            </label>
-                            <input
-                              type="url"
-                              value={floatingButtonImageUrl}
-                              onChange={(e) => setFloatingButtonImageUrl(e.target.value)}
-                              placeholder="https://example.com/image.jpg"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                            />
-                            <p className="text-xs text-gray-500 mt-1">
-                              空の場合は管理人画像が使用されます
-                            </p>
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={saveFloatingButtonImage}
-                              disabled={isSaving}
-                              className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50"
-                            >
-                              {isSaving ? '保存中...' : '保存'}
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsEditing(false)
-                                setFloatingButtonImageUrl(adminInfo.floating_button_image_url || '')
-                              }}
-                              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-                            >
-                              キャンセル
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <p className="text-gray-700">
-                            現在のURL: {adminInfo.floating_button_image_url || '(管理人画像を使用)'}
-                          </p>
-                          <button
-                            onClick={() => setIsEditing(true)}
-                            className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
-                          >
-                            編集
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </section>
 
               {/* メッセージ */}
               <section className="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-6">
@@ -473,8 +379,8 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* キャラクター画像編集モーダル */}
-      {isEditingCharacter && (
+      {/* キャラクター画像編集モーダル - 一時的に無効化 */}
+      {/* {isEditingCharacter && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-4">管理人画像を編集</h3>
@@ -532,7 +438,7 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   )
 }
