@@ -73,14 +73,14 @@ export default function AdminFloatingButton() {
               </div>
             )}
             
-            {/* ホバー時のオーバーレイ */}
-            <div className={`
+            {/* ホバー時のオーバーレイ - 一時的に無効化 */}
+            {/* <div className={`
               absolute inset-0 bg-black/30 flex items-center justify-center
               transition-opacity duration-300
               ${isHovered ? 'opacity-100' : 'opacity-0'}
             `}>
               <span className="text-white text-sm font-bold">管理人ページ</span>
-            </div>
+            </div> */}
           </div>
           
           {/* 脈動アニメーション - 一時的に無効化 */}
