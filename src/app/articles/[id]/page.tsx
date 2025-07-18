@@ -88,7 +88,9 @@ async function getArticle(id: string): Promise<ArticleWithRelatedContent | null>
         url_path: `/categories/${cat.slug}`,
         sort_order: null,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        image_url: null,
+        icon_url: null
       };
     }) || [];
 
