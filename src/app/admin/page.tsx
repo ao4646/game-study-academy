@@ -1,16 +1,15 @@
+'use client'
+
 import { createClient } from '@supabase/supabase-js'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
-export const metadata: Metadata = {
-  title: '管理人について - Game Study Academy',
-  description: 'Game Study Academyの管理人「TOP」についてのページです。',
-}
 
 interface AdminInfo {
   id: number
@@ -19,6 +18,7 @@ interface AdminInfo {
   bio: string
   avatar_url: string | null
   character_image_url: string | null
+  floating_button_image_url: string | null
   twitter_url: string | null
   github_url: string | null
   website_url: string | null
@@ -28,23 +28,76 @@ interface AdminInfo {
   updated_at: string
 }
 
-async function getAdminInfo(): Promise<AdminInfo | null> {
-  const { data, error } = await supabase
-    .from('admin_info')
-    .select('*')
-    .eq('id', 1)
-    .single()
+export default function AdminPage() {
+  const [adminInfo, setAdminInfo] = useState<AdminInfo | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [floatingButtonImageUrl, setFloatingButtonImageUrl] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
 
-  if (error) {
-    console.error('管理人情報の取得エラー:', error)
-    return null
+  useEffect(() => {
+    fetchAdminInfo()
+  }, [])
+
+  const fetchAdminInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('admin_info')
+        .select('*')
+        .eq('id', 1)
+        .single()
+
+      if (error) {
+        console.error('管理人情報の取得エラー:', error)
+        return
+      }
+
+      setAdminInfo(data)
+      setFloatingButtonImageUrl(data.floating_button_image_url || '')
+    } catch (error) {
+      console.error('管理人情報の取得中にエラーが発生しました:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  return data
-}
+  const saveFloatingButtonImage = async () => {
+    if (!adminInfo) return
 
-export default async function AdminPage() {
-  const adminInfo = await getAdminInfo()
+    setIsSaving(true)
+    try {
+      const { error } = await supabase
+        .from('admin_info')
+        .update({ floating_button_image_url: floatingButtonImageUrl || null })
+        .eq('id', adminInfo.id)
+
+      if (error) {
+        console.error('保存エラー:', error)
+        alert('保存に失敗しました')
+        return
+      }
+
+      setAdminInfo({ ...adminInfo, floating_button_image_url: floatingButtonImageUrl || null })
+      setIsEditing(false)
+      alert('保存しました')
+    } catch (error) {
+      console.error('保存中にエラーが発生しました:', error)
+      alert('保存に失敗しました')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-100 via-red-50 to-orange-200 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">読み込み中...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!adminInfo) {
     return (
@@ -166,6 +219,90 @@ export default async function AdminPage() {
                       {game}
                     </span>
                   ))}
+                </div>
+              </section>
+
+              {/* 浮動ボタン画像設定 */}
+              <section>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <span className="w-2 h-6 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
+                  浮動ボタン画像設定
+                </h3>
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <div className="flex flex-col md:flex-row gap-6 items-start">
+                    {/* 現在の画像プレビュー */}
+                    <div className="flex-shrink-0">
+                      <p className="text-sm text-gray-600 mb-2">現在の浮動ボタン画像:</p>
+                      <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300">
+                        {adminInfo.floating_button_image_url || adminInfo.character_image_url ? (
+                          <img
+                            src={adminInfo.floating_button_image_url || adminInfo.character_image_url}
+                            alt="浮動ボタン画像"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                            <span className="text-white text-lg font-bold">
+                              {adminInfo.display_name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 編集フォーム */}
+                    <div className="flex-1">
+                      {isEditing ? (
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              浮動ボタン画像URL:
+                            </label>
+                            <input
+                              type="url"
+                              value={floatingButtonImageUrl}
+                              onChange={(e) => setFloatingButtonImageUrl(e.target.value)}
+                              placeholder="https://example.com/image.jpg"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              空の場合は管理人画像が使用されます
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={saveFloatingButtonImage}
+                              disabled={isSaving}
+                              className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50"
+                            >
+                              {isSaving ? '保存中...' : '保存'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setIsEditing(false)
+                                setFloatingButtonImageUrl(adminInfo.floating_button_image_url || '')
+                              }}
+                              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                            >
+                              キャンセル
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-gray-700">
+                            現在のURL: {adminInfo.floating_button_image_url || '(管理人画像を使用)'}
+                          </p>
+                          <button
+                            onClick={() => setIsEditing(true)}
+                            className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
+                          >
+                            編集
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </section>
 
