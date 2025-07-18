@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -183,7 +184,7 @@ export default async function AdminPage() {
 
           {/* 戻るボタン */}
           <div className="text-center mt-8">
-            <a
+            <Link
               href="/"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-full font-medium hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl"
             >
@@ -191,7 +192,7 @@ export default async function AdminPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               トップページに戻る
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -7,8 +7,8 @@ import AdminFloatingButton from '@/components/AdminFloatingButton'
 
 // Supabaseクライアント設定
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
 // 型定義（記事一覧ページと同じ）
