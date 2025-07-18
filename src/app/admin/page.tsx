@@ -34,6 +34,7 @@ export default function AdminPage() {
   const [floatingButtonImageUrl, setFloatingButtonImageUrl] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     fetchAdminInfo()
@@ -85,6 +86,47 @@ export default function AdminPage() {
       alert('保存に失敗しました')
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const uploadFloatingButtonImage = async (file: File) => {
+    setIsUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload-floating-button-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'アップロードに失敗しました')
+      }
+
+      if (adminInfo) {
+        setAdminInfo({ ...adminInfo, floating_button_image_url: result.url })
+        setFloatingButtonImageUrl(result.url)
+        alert('画像をアップロードしました')
+      }
+    } catch (error) {
+      console.error('アップロード中にエラーが発生しました:', error)
+      alert('アップロードに失敗しました')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        uploadFloatingButtonImage(file)
+      } else {
+        alert('画像ファイルを選択してください')
+      }
     }
   }
 
@@ -256,7 +298,23 @@ export default function AdminPage() {
                         <div className="space-y-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              浮動ボタン画像URL:
+                              画像ファイルをアップロード:
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleFileChange}
+                              disabled={isUploading}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                            />
+                            {isUploading && (
+                              <p className="text-sm text-orange-600 mt-1">アップロード中...</p>
+                            )}
+                          </div>
+                          <div className="text-center text-gray-500">または</div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              画像URL:
                             </label>
                             <input
                               type="url"
