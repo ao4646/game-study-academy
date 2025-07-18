@@ -57,7 +57,7 @@ export default function UploadAdminImagePage() {
       const formData = new FormData()
       formData.append('file', selectedFile)
 
-      const response = await fetch('/api/upload-admin-image', {
+      const response = await fetch('/api/upload-floating-button-image', {
         method: 'POST',
         body: formData
       })
@@ -88,9 +88,9 @@ export default function UploadAdminImagePage() {
       <div className="max-w-2xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">管理人キャラクター画像アップロード</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">浮動ボタン画像アップロード</h1>
             <p className="text-gray-600">
-              提供された管理人キャラクター画像をSupabaseにアップロードします。
+              浮動ボタン用の画像をSupabaseにアップロードします。
             </p>
           </div>
 
