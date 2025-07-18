@@ -58,7 +58,7 @@ export default function AdminFloatingButton() {
           onMouseLeave={() => setIsHovered(false)}
         >
           {/* 画像コンテナ */}
-          <div className="relative w-[150px] h-[150px] sm:w-[120px] sm:h-[120px] md:w-[150px] md:h-[150px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
+          <div className="relative w-[100px] h-[100px] md:w-[150px] md:h-[150px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
             {adminInfo.character_image_url ? (
               <img
                 src={adminInfo.character_image_url}
