@@ -83,8 +83,8 @@ export default function AdminFloatingButton() {
             </div>
           </div>
           
-          {/* 脈動アニメーション */}
-          <div className="absolute inset-0 rounded-full border-4 border-orange-400 animate-ping opacity-75" style={{ animationDuration: '2s' }}></div>
+          {/* 脈動アニメーション - 一時的に無効化 */}
+          {/* <div className="absolute inset-0 rounded-full border-4 border-orange-400 animate-ping opacity-75" style={{ animationDuration: '2s' }}></div> */}
           
           {/* ホバー時の説明テキスト */}
           <div className={`
