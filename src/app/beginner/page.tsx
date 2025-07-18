@@ -256,7 +256,7 @@ export default async function BeginnerGuidePage() {
                   📚 攻略記事を読む
                 </Link>
                 <Link
-                  href="/categories/8"
+                  href="/categories/9"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
                 >
                   🎮 初心者向け記事
@@ -415,7 +415,7 @@ export default async function BeginnerGuidePage() {
                 📚 攻略記事を読む
               </Link>
               <Link
-                href="/categories/8"
+                href="/categories/9"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
               >
                 🔰 初心者向け記事
