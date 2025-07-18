@@ -584,22 +584,22 @@ export default async function HomePage() {
               実況者たちの技術を学んで、あなたのゲームスキルを次のレベルへ。<br />
               記事と動画を両方見ることで、クリエイターの皆さんも応援しよう！
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col lg:flex-row gap-4 justify-center items-center">
               <Link
                 href="/articles"
-                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
+                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105 whitespace-nowrap"
               >
                 📚 記事一覧を見る
               </Link>
               <Link
                 href="/beginner"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
               >
                 🔰 エルデンリング初心者ガイド
               </Link>
               <Link
                 href="/beginner/nightreign"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
               >
                 🌙 ナイトレイン初心者ガイド
               </Link>
