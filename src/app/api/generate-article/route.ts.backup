@@ -1,0 +1,237 @@
+// src/app/api/generate-article/route.ts（クリーン版）
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import Anthropic from '@anthropic-ai/sdk';
+
+export async function POST(request: NextRequest) {
+  try {
+    console.log('=== Claude記事生成開始 ===');
+    
+    const { video_id, category_slug } = await request.json();
+    
+    if (!video_id) {
+      return NextResponse.json({
+        error: 'video_id is required'
+      }, { status: 400 });
+    }
+
+    // Supabase接続
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    // 動画データ取得
+    const { data: video, error: videoError } = await supabase
+      .from('videos')
+      .select('*')
+      .eq('video_id', video_id)
+      .single();
+
+    if (videoError || !video) {
+      return NextResponse.json({
+        error: 'Video not found',
+        details: videoError
+      }, { status: 404 });
+    }
+
+    console.log('動画データ取得:', video.title);
+
+    // Claude API接続
+    const anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY!,
+    });
+
+    // カテゴリ情報取得
+    let categoryInfo = '';
+    let categoryId = null;
+    if (category_slug) {
+      const { data: category } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('slug', category_slug)
+        .single();
+      
+      if (category) {
+        categoryInfo = `, カテゴリ: ${category.name}`;
+        categoryId = category.id;
+      }
+    }
+
+    // Claude APIで記事生成（改良版プロンプト）
+    const prompt = `
+あなたは「YouTube動画から学ぶ」ゲーム攻略サイトの専門ライターです。
+読者の検索意図を満たし、動画視聴を促進する高品質記事を作成してください。
+
+【動画情報】
+タイトル: ${video.title}
+説明: ${video.description}
+チャンネル: ${video.channel_title}
+投稿日: ${video.published_at}${categoryInfo}
+
+【記事の独自価値】
+1. YouTube動画学習の優位性を明確化
+2. 従来の文字攻略との差別化  
+3. 動画ならではの学習体験の価値
+
+【文章品質要件】
+- 冗長な表現を避け、簡潔で読みやすく
+- 専門用語は簡潔に説明
+- AI生成感を排除した自然な文章
+- 読者の検索意図に直接応える構成
+
+【記事構成（1500文字）】
+# [SEOタイトル]（50-60文字、自然なキーワード配置）
+
+## この動画で学べる攻略のポイント（150文字）
+具体的な学習価値を3つのポイントで簡潔に
+
+## なぜ動画で学ぶべきか（225文字）
+・視覚的理解の優位性
+・リアルタイム戦闘の観察価値  
+・失敗例から学ぶ重要性
+
+## [ボス名/戦術名]攻略の新発見（300文字）
+・動画で明かされる重要な発見
+・従来攻略法との違い（詳細は避ける）
+・なぜこの発見が重要なのか
+
+## 実践で身につく5つのスキル（450文字）
+・判断力向上
+・タイミング習得
+・危機管理能力
+・効率的な学習方法
+・応用力開発
+
+## 視聴者の成功事例と反響（200文字）
+コメントや反応から見る実際の効果
+
+## この動画をおすすめする理由（175文字）
+最終的な視聴促進メッセージ
+
+【記事品質基準】
+1. 読者が「動画を見たい」と感じる内容
+2. 検索意図（攻略情報）に応える価値提示
+3. YouTuberの利益を損なわない配慮
+4. 独自性のある価値提案
+5. 自然で読みやすい文章
+
+【禁止事項】
+- 具体的攻略手順の詳細記載
+- 動画の完全なネタバレ
+- 冗長で回りくどい表現
+- 意味のない修飾語の多用
+
+2000文字で、動画学習の価値を伝える魅力的な記事を作成してください。
+`;
+
+    console.log('Claude API呼び出し開始');
+
+    const response = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 4000,
+      temperature: 0.7,
+      messages: [{
+        role: 'user',
+        content: prompt
+      }]
+    });
+
+    const generatedContent = response.content[0].type === 'text' 
+      ? response.content[0].text 
+      : '';
+
+    console.log('記事生成完了、文字数:', generatedContent.length);
+
+    // 記事タイトル抽出
+    const lines = generatedContent.split('\n').filter(line => line.trim());
+    const h1Line = lines.find(line => line.startsWith('# '));
+    const articleTitle = h1Line?.replace(/^#+\s*/, '') || `${video.title} - 攻略ガイド`;
+    
+    // メタディスクリプション生成
+    const contentBody = generatedContent.replace(/^#+.*$/gm, '').trim();
+    const metaDescription = contentBody.substring(0, 160).replace(/\n/g, ' ') + '...';
+    
+    // SEOキーワード抽出
+    const seoKeywords = `エルデンリング,ナイトレイン,${video.title.split(/[【】・]/)[1] || '攻略'},YouTube,動画解説`;
+
+    console.log('SEOタイトル:', articleTitle);
+    console.log('メタディスクリプション:', metaDescription);
+
+    // 記事をデータベースに保存
+    const { data: article, error: insertError } = await supabase
+      .from('articles')
+      .insert({
+        title: articleTitle,
+        content: generatedContent,
+        summary: metaDescription,
+        category_id: categoryId,
+        video_id: video.id,
+        game_id: video.game_id,
+        published: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('記事保存エラー:', insertError);
+      return NextResponse.json({
+        error: 'Failed to save article',
+        details: insertError
+      }, { status: 500 });
+    }
+
+    console.log('記事保存完了:', article.id);
+
+    // SEOデータを別途更新
+    try {
+      await supabase
+        .from('articles')
+        .update({
+          seo_title: articleTitle,
+          meta_description: metaDescription,
+          seo_keywords: seoKeywords
+        })
+        .eq('id', article.id);
+      
+      console.log('SEO更新完了');
+    } catch (seoError) {
+      console.log('SEO更新エラー（非致命的）:', seoError);
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: '記事生成・保存完了',
+      article: {
+        id: article.id,
+        title: article.title,
+        content_length: generatedContent.length,
+        summary: article.summary,
+        seo_data: {
+          seo_title: articleTitle,
+          meta_description: metaDescription,
+          keywords: seoKeywords
+        },
+        video_source: {
+          title: video.title,
+          channel: video.channel_title
+        }
+      },
+      metrics: {
+        content_length: generatedContent.length,
+        tokens_used: response.usage?.input_tokens + response.usage?.output_tokens || 0,
+        processing_time: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Claude記事生成エラー:', error);
+    return NextResponse.json({
+      error: 'Article generation failed',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
+  }
+}
