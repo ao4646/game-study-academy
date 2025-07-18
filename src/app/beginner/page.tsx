@@ -12,13 +12,14 @@ const supabase = createClient(
 // メタデータ生成（SEO最適化）
 export function generateMetadata(): Metadata {
   return {
-    title: 'Nightreign 初心者ガイド - ゲームの基本から上達のコツまで',
-    description: 'エルデンリング: ナイトレインの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+    title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
+    description: 'エルデンリングシリーズの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
     keywords: [
+      'エルデンリング',
+      'Elden Ring',
       'Nightreign',
       '初心者',
       '初心者ガイド',
-      'エルデンリング',
       'ナイトレイン',
       'ゲーム攻略',
       '基本操作',
@@ -31,21 +32,21 @@ export function generateMetadata(): Metadata {
       locale: 'ja_JP',
       url: 'https://game-study-academy.com/beginner',
       siteName: 'Game Study Academy',
-      title: 'Nightreign 初心者ガイド - ゲームの基本から上達のコツまで',
-      description: 'エルデンリング: ナイトレインの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+      title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
+      description: 'エルデンリングシリーズの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
       images: [
         {
           url: 'https://game-study-academy.com/og-image.jpg',
           width: 1200,
           height: 630,
-          alt: 'Game Study Academy - Nightreign 初心者ガイド',
+          alt: 'Game Study Academy - エルデンリング 初心者ガイド',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Nightreign 初心者ガイド - ゲームの基本から上達のコツまで',
-      description: 'エルデンリング: ナイトレインの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+      title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
+      description: 'エルデンリングシリーズの初心者向け完全ガイド。基本操作から戦術、キャラクター解説まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
       images: ['https://game-study-academy.com/og-image.jpg'],
     },
     alternates: {
@@ -70,13 +71,13 @@ const basicGuides = [
   },
   {
     id: 2,
-    title: 'キャラクター選択',
+    title: 'キャラクター・クラス選択',
     icon: '👤',
-    description: '無頼漢・復讐者の特徴と初心者におすすめのキャラクターを紹介',
+    description: '各クラスの特徴と初心者におすすめの選択肢を紹介',
     tips: [
-      '無頼漢：バランス型で初心者におすすめ',
-      '復讐者：上級者向けの高火力キャラ',
-      '各キャラの得意な戦術を理解する',
+      'バランス型クラス：初心者におすすめ',
+      '魔術師系：遠距離攻撃が得意',
+      '戦士系：近接戦闘に特化',
       'プレイスタイルに合わせて選択'
     ]
   },
@@ -129,8 +130,8 @@ const advancedTips = [
 // よくある質問
 const faqs = [
   {
-    question: 'どのキャラクターから始めるのがおすすめですか？',
-    answer: '初心者の方には「無頼漢」がおすすめです。バランスの取れた性能で、攻撃・防御・機動力のすべてが平均的なため、ゲームの基本を学ぶのに最適です。'
+    question: 'どのクラスから始めるのがおすすめですか？',
+    answer: '初心者の方にはバランス型のクラス（放浪騎士など）がおすすめです。攻撃・防御・機動力のすべてが平均的なため、ゲームの基本を学ぶのに最適です。'
   },
   {
     question: '敵が強すぎて勝てません。どうすればいいですか？',
@@ -240,11 +241,11 @@ export default async function BeginnerGuidePage() {
               <div className="flex items-center justify-center mb-6">
                 <span className="text-6xl mr-4">🔰</span>
                 <h1 className="text-4xl md:text-5xl font-bold">
-                  Nightreign 初心者ガイド
+                  エルデンリング 初心者ガイド
                 </h1>
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                エルデンリング: ナイトレインの世界へようこそ！<br />
+                エルデンリングシリーズの世界へようこそ！<br />
                 プロ実況者の知識を基に、初心者の方でも安心してプレイできるよう<br />
                 基本操作から上達のコツまでを丁寧に解説します。
               </p>
@@ -293,7 +294,7 @@ export default async function BeginnerGuidePage() {
                 🎮 ゲームの基本を学ぼう
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                まずはこれらの基本を覚えて、Nightreignの世界に慣れていきましょう
+                まずはこれらの基本を覚えて、エルデンリングの世界に慣れていきましょう
               </p>
             </div>
 
