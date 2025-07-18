@@ -1,12 +1,6 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
-// Supabaseクライアント設定
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 // 記事データの型定義
 interface Article {
   id: number
@@ -18,6 +12,17 @@ interface Article {
 // 公開記事一覧を取得
 async function getPublishedArticles(): Promise<Article[]> {
   try {
+    // 環境変数の確認
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.log('Supabase not configured for sitemap generation');
+      return [];
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     const { data: articles, error } = await supabase
       .from('articles')
       .select('id, updated_at, created_at, published')
