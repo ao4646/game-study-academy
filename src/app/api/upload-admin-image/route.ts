@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 export async function POST(request: NextRequest) {
   try {
+    // 環境変数の確認
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({
+        error: 'Supabase configuration not available',
+        message: 'Environment variables not configured'
+      }, { status: 503 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
     const formData = await request.formData()
     const file = formData.get('file') as File
     

@@ -1,16 +1,24 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
-console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
-console.log('Supabase Key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-
 export async function GET() {
   try {
+    // 環境変数の確認
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    console.log('Supabase URL:', supabaseUrl)
+    console.log('Supabase Key exists:', !!supabaseKey)
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Supabase configuration not available',
+        message: 'Environment variables not configured' 
+      }, { status: 503 })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
     // バケット一覧を取得
     const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets()
     

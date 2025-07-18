@@ -148,10 +148,19 @@ export async function POST(request: NextRequest) {
     console.log(`Filtered videos: ${filteredVideos.length} from ${data.items?.length || 0}`);
     
     // Supabase保存処理 - 現在のテーブル構造に合わせて修正
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({
+        success: false,
+        error: 'Supabase configuration not available',
+        message: 'Environment variables not configured',
+        videos: filteredVideos.slice(0, 5)
+      }, { status: 503 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
     
     // 現在のテーブル構造に合わせたデータ準備
     const videoInserts = filteredVideos.map((video: any) => ({

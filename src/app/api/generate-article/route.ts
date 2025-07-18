@@ -41,10 +41,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Supabase接続
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({
+        error: 'Supabase configuration not available',
+        message: 'Environment variables not configured'
+      }, { status: 503 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // 動画データ取得
     const { data: video, error: videoError } = await supabase

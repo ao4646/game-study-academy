@@ -12,10 +12,17 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({
+        error: 'Supabase configuration not available',
+        message: 'Environment variables not configured'
+      }, { status: 503 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const newContent = `# エルデンリング「強化エデレ」攻略が劇的に変わる！守護者戦術の新発見とは【動画解説】
 
