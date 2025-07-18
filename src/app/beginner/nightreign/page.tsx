@@ -12,44 +12,47 @@ const supabase = createClient(
 // メタデータ生成（SEO最適化）
 export function generateMetadata(): Metadata {
   return {
-    title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
-    description: 'エルデンリング（Elden Ring）の初心者向け完全ガイド。基本操作から戦術、クラス選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+    title: 'エルデンリング：ナイトレイン 初心者ガイド - ゲームの基本から上達のコツまで',
+    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の初心者向け完全ガイド。基本操作から戦術、キャラクター選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
     keywords: [
       'エルデンリング',
+      'ナイトレイン',
       'Elden Ring',
+      'Nightreign',
       '初心者',
       '初心者ガイド',
       'ゲーム攻略',
       '基本操作',
-      'クラス選択',
-      '放浪騎士',
+      'キャラクター選択',
+      '無頼漢',
+      '復讐者',
       'YouTube',
       '動画解説'
     ],
     openGraph: {
       type: 'website',
       locale: 'ja_JP',
-      url: 'https://game-study-academy.com/beginner',
+      url: 'https://game-study-academy.com/beginner/nightreign',
       siteName: 'Game Study Academy',
-      title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
-      description: 'エルデンリング（Elden Ring）の初心者向け完全ガイド。基本操作から戦術、クラス選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+      title: 'エルデンリング：ナイトレイン 初心者ガイド - ゲームの基本から上達のコツまで',
+      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の初心者向け完全ガイド。基本操作から戦術、キャラクター選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
       images: [
         {
           url: 'https://game-study-academy.com/og-image.jpg',
           width: 1200,
           height: 630,
-          alt: 'Game Study Academy - エルデンリング 初心者ガイド',
+          alt: 'Game Study Academy - エルデンリング：ナイトレイン 初心者ガイド',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'エルデンリング 初心者ガイド - ゲームの基本から上達のコツまで',
-      description: 'エルデンリング（Elden Ring）の初心者向け完全ガイド。基本操作から戦術、クラス選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
+      title: 'エルデンリング：ナイトレイン 初心者ガイド - ゲームの基本から上達のコツまで',
+      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の初心者向け完全ガイド。基本操作から戦術、キャラクター選択まで、YouTube動画から学んだプロの知識を分かりやすく解説します。',
       images: ['https://game-study-academy.com/og-image.jpg'],
     },
     alternates: {
-      canonical: 'https://game-study-academy.com/beginner',
+      canonical: 'https://game-study-academy.com/beginner/nightreign',
     },
   }
 }
@@ -70,14 +73,14 @@ const basicGuides = [
   },
   {
     id: 2,
-    title: 'キャラクター・クラス選択',
+    title: 'キャラクター選択',
     icon: '👤',
-    description: 'エルデンリングの各クラス（素性）の特徴と初心者におすすめの選択肢を紹介',
+    description: 'ナイトレインの各キャラクターの特徴と初心者におすすめの選択肢を紹介',
     tips: [
-      '放浪騎士：バランス型で初心者におすすめ',
-      '魔術師：知力が高く魔術を扱える',
-      '戦士：筋力が高く重装備が得意',
-      '囚人：器用さが高く多彩な戦術が可能'
+      '無頼漢：バランス型で初心者におすすめ',
+      '復讐者：攻撃力が高く一撃必殺を狙える',
+      '魔剣士：魔法と剣を使い分ける上級者向け',
+      '賢者：魔法中心の遠距離戦闘が得意'
     ]
   },
   {
@@ -114,7 +117,7 @@ const advancedTips = [
   },
   {
     title: '🎯 練習方法',
-    content: '同じエリアを繰り返しプレイして、敵の動きを完全に覚えましょう。慣れてきたら異なる戦術を試して、自分に合った戦い方を見つけることが大切です。'
+    content: '同じエリアを繰り返しプレイして、敵の動きを完全に覚えましょう。ナイトレインでは特に敵の攻撃パターンが独特なので、慣れるまで時間をかけることが大切です。'
   },
   {
     title: '🧠 戦術思考',
@@ -122,15 +125,15 @@ const advancedTips = [
   },
   {
     title: '⚡ 上達の近道',
-    content: '失敗を恐れず、積極的に挑戦しましょう。死んでも経験値は蓄積されます。何度も挑戦して、徐々に上達していく過程を楽しみましょう。'
+    content: '失敗を恐れず、積極的に挑戦しましょう。ナイトレインでは死んでも経験値は蓄積されます。何度も挑戦して、徐々に上達していく過程を楽しみましょう。'
   }
 ]
 
 // よくある質問
 const faqs = [
   {
-    question: 'どのクラスから始めるのがおすすめですか？',
-    answer: '初心者の方にはバランス型のクラス（放浪騎士など）がおすすめです。攻撃・防御・機動力のすべてが平均的なため、ゲームの基本を学ぶのに最適です。'
+    question: 'どのキャラクターから始めるのがおすすめですか？',
+    answer: '初心者の方にはバランス型のキャラクター（無頼漢など）がおすすめです。攻撃・防御・機動力のすべてが平均的なため、ナイトレインの基本を学ぶのに最適です。'
   },
   {
     question: '敵が強すぎて勝てません。どうすればいいですか？',
@@ -138,11 +141,11 @@ const faqs = [
   },
   {
     question: '動画を見ても上手くできません。',
-    answer: '動画と同じ操作をしようとせず、まずは基本操作を身につけることを優先しましょう。慣れてきたら少しずつ高度なテクニックに挑戦してください。'
+    answer: '動画と同じ操作をしようとせず、まずは基本操作を身につけることを優先しましょう。ナイトレインの操作感に慣れてきたら少しずつ高度なテクニックに挑戦してください。'
   },
   {
     question: 'マルチプレイとソロプレイ、どちらがおすすめですか？',
-    answer: '最初はソロプレイで基本を覚えることをおすすめします。操作に慣れてきたらマルチプレイで他のプレイヤーと協力して楽しみましょう。'
+    answer: '最初はソロプレイで基本を覚えることをおすすめします。ナイトレインの操作に慣れてきたらマルチプレイで他のプレイヤーと協力して楽しみましょう。'
   }
 ]
 
@@ -199,7 +202,7 @@ function GuideCard({ guide }: { guide: typeof basicGuides[0] }) {
 // 上達のコツカード
 function TipCard({ tip }: { tip: typeof advancedTips[0] }) {
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border-l-4 border-blue-500">
+    <div className="bg-gradient-to-r from-purple-50 to-violet-50 rounded-lg p-6 border-l-4 border-purple-500">
       <h3 className="text-lg font-semibold text-gray-900 mb-3">{tip.title}</h3>
       <p className="text-gray-700 leading-relaxed">{tip.content}</p>
     </div>
@@ -217,13 +220,14 @@ function FAQItem({ faq }: { faq: typeof faqs[0] }) {
 }
 
 // メインコンポーネント
-export default async function BeginnerGuidePage() {
+export default async function NightreignBeginnerGuidePage() {
   const recommendedArticles = await getRecommendedArticles()
 
   // パンくずリストデータ
   const breadcrumbItems = [
     { name: 'ホーム', url: 'https://game-study-academy.com' },
-    { name: '初心者ガイド', url: 'https://game-study-academy.com/beginner' }
+    { name: '初心者ガイド', url: 'https://game-study-academy.com/beginner' },
+    { name: 'ナイトレイン', url: 'https://game-study-academy.com/beginner/nightreign' }
   ]
 
   return (
@@ -234,32 +238,32 @@ export default async function BeginnerGuidePage() {
 
       <div className="min-h-screen bg-gray-50">
         {/* ヒーローセクション */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="bg-gradient-to-r from-purple-600 to-violet-700 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
-                <span className="text-6xl mr-4">🔰</span>
+                <span className="text-6xl mr-4">🌙</span>
                 <h1 className="text-4xl md:text-5xl font-bold">
-                  エルデンリング 初心者ガイド
+                  ナイトレイン 初心者ガイド
                 </h1>
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                エルデンリング（Elden Ring）の世界へようこそ！<br />
+                エルデンリング：ナイトレイン（Elden Ring: Nightreign）の世界へようこそ！<br />
                 プロ実況者の知識を基に、初心者の方でも安心してプレイできるよう<br />
                 基本操作から上達のコツまでを丁寧に解説します。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/articles"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
+                  className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
                 >
                   📚 攻略記事を読む
                 </Link>
                 <Link
                   href="/categories/8"
-                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
+                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
                 >
-                  🎮 初心者向け記事
+                  🌙 初心者向け記事
                 </Link>
               </div>
             </div>
@@ -279,7 +283,15 @@ export default async function BeginnerGuidePage() {
                 <span className="text-gray-400">/</span>
               </li>
               <li>
-                <span className="text-gray-900 font-medium">初心者ガイド</span>
+                <Link href="/beginner" className="text-gray-500 hover:text-gray-700">
+                  初心者ガイド
+                </Link>
+              </li>
+              <li>
+                <span className="text-gray-400">/</span>
+              </li>
+              <li>
+                <span className="text-gray-900 font-medium">ナイトレイン</span>
               </li>
             </ol>
           </nav>
@@ -293,7 +305,7 @@ export default async function BeginnerGuidePage() {
                 🎮 ゲームの基本を学ぼう
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                まずはこれらの基本を覚えて、エルデンリングの世界に慣れていきましょう
+                まずはこれらの基本を覚えて、ナイトレインの世界に慣れていきましょう
               </p>
             </div>
 
@@ -381,7 +393,7 @@ export default async function BeginnerGuidePage() {
                         </div>
                       </div>
                       <div className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
                           {article.seo_title || article.title}
                         </h3>
                         <p className="text-gray-600 text-sm">
@@ -397,10 +409,10 @@ export default async function BeginnerGuidePage() {
         )}
 
         {/* Call to Action */}
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <section className="py-16 bg-gradient-to-r from-purple-600 to-violet-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold mb-6">
-              🎮 さあ、エルデンリングの世界を冒険しよう！
+              🌙 さあ、ナイトレインの世界を冒険しよう！
             </h2>
             <p className="text-xl mb-8 leading-relaxed">
               基本を覚えたら、実際にプレイしてみましょう。<br />
@@ -410,13 +422,13 @@ export default async function BeginnerGuidePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/articles"
-                className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
+                className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
               >
                 📚 攻略記事を読む
               </Link>
               <Link
                 href="/categories/8"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
               >
                 🔰 初心者向け記事
               </Link>

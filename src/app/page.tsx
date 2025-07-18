@@ -381,7 +381,13 @@ export default async function HomePage() {
                   href="/beginner"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
                 >
-                  🔰 初心者ガイド
+                  🔰 エルデンリング初心者ガイド
+                </Link>
+                <Link
+                  href="/beginner/nightreign"
+                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+                >
+                  🌙 ナイトレイン初心者ガイド
                 </Link>
               </div>
             </div>
@@ -589,7 +595,13 @@ export default async function HomePage() {
                 href="/beginner"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
               >
-                🔰 初心者向けガイド
+                🔰 エルデンリング初心者ガイド
+              </Link>
+              <Link
+                href="/beginner/nightreign"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+              >
+                🌙 ナイトレイン初心者ガイド
               </Link>
             </div>
           </div>
@@ -619,7 +631,8 @@ export default async function HomePage() {
                 <h4 className="text-lg font-semibold mb-4">サイト情報</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li><Link href="/articles" className="hover:text-white transition-colors">記事一覧</Link></li>
-                  <li><Link href="/beginner" className="hover:text-white transition-colors">初心者ガイド</Link></li>
+                  <li><Link href="/beginner" className="hover:text-white transition-colors">エルデンリング初心者ガイド</Link></li>
+                  <li><Link href="/beginner/nightreign" className="hover:text-white transition-colors">ナイトレイン初心者ガイド</Link></li>
                   <li><Link href="#" className="hover:text-white transition-colors">サイトについて</Link></li>
                   <li><Link href="#" className="hover:text-white transition-colors">お問い合わせ</Link></li>
                 </ul>
