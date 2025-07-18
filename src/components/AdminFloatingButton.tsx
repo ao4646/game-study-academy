@@ -11,6 +11,7 @@ const supabase = createClient(
 
 interface AdminInfo {
   character_image_url: string | null
+  floating_button_image_url: string | null
   display_name: string
 }
 
@@ -26,7 +27,7 @@ export default function AdminFloatingButton() {
     try {
       const { data, error } = await supabase
         .from('admin_info')
-        .select('character_image_url, display_name')
+        .select('character_image_url, floating_button_image_url, display_name')
         .eq('id', 1)
         .single()
 
@@ -59,9 +60,9 @@ export default function AdminFloatingButton() {
         >
           {/* 画像コンテナ */}
           <div className="relative w-[100px] h-[100px] md:w-[150px] md:h-[150px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
-            {adminInfo.character_image_url ? (
+            {adminInfo.floating_button_image_url || adminInfo.character_image_url ? (
               <img
-                src={adminInfo.character_image_url}
+                src={adminInfo.floating_button_image_url || adminInfo.character_image_url}
                 alt={`管理人 ${adminInfo.display_name}`}
                 className="w-full h-full object-cover"
               />
