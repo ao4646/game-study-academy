@@ -142,7 +142,7 @@ export default function SiteMenu() {
       {/* メニューボタン */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-40 bg-red-600 text-white p-3 rounded-lg shadow-lg hover:bg-red-700 transition-colors"
+        className="fixed top-4 left-4 z-40 bg-red-600 text-white p-3 rounded-lg shadow-lg hover:bg-red-700 transition-colors border-2 border-black"
         aria-label="メニューを開く"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
