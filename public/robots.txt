@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# 管理機能ページをクローラーから隠す
+Disallow: /admin/management-dashboard-secret-xyz123/
+Disallow: /admin/boss-images/
+Disallow: /admin/character-images/
+Disallow: /api/upload-boss-image
+Disallow: /api/upload-character-image
+
+Sitemap: https://game-study-academy.com/sitemap.xml

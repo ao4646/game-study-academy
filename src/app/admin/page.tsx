@@ -364,6 +364,7 @@ export default function AdminPage() {
             </div>
           </div>
 
+
           {/* 戻るボタン */}
           <div className="text-center mt-8">
             <Link
@@ -376,6 +377,19 @@ export default function AdminPage() {
               トップページに戻る
             </Link>
           </div>
+
+          {/* 管理機能へのアクセス（隠しリンク） */}
+          {/* 必要な場合は以下のコメントアウトを解除してください */}
+          {/* 
+          <div className="text-center mt-4">
+            <Link
+              href="/admin/management-dashboard-secret-xyz123"
+              className="text-xs text-gray-400 hover:text-gray-600"
+            >
+              管理機能
+            </Link>
+          </div>
+          */}
         </div>
       </div>
 

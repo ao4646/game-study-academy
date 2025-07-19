@@ -134,6 +134,27 @@ async function getNightreignBosses(): Promise<Boss[]> {
   }
 }
 
+// グラディウス（ID:1）取得
+async function getGladius(): Promise<Boss | null> {
+  try {
+    const { data: boss, error } = await supabase
+      .from('bosses')
+      .select('*')
+      .eq('id', 1)
+      .single()
+
+    if (error || !boss) {
+      console.error('グラディウス取得エラー:', error)
+      return null
+    }
+
+    return boss
+  } catch (error) {
+    console.error('グラディウス取得に失敗しました:', error)
+    return null
+  }
+}
+
 // メタデータ生成
 export function generateMetadata(): Metadata {
   return {
@@ -209,7 +230,15 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
         <div className="p-6">
           {boss && (
             <div className="flex items-center mb-3">
-              <span className="text-2xl mr-2">👑</span>
+              {boss.image_url ? (
+                <img
+                  src={boss.image_url}
+                  alt={boss.name}
+                  className="w-8 h-8 object-cover rounded mr-2"
+                />
+              ) : (
+                <span className="text-2xl mr-2">👑</span>
+              )}
               <span className="text-lg font-bold text-red-600">{boss.name}</span>
             </div>
           )}
@@ -242,11 +271,26 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
 function BossCard({ boss, articleCount }: { boss: Boss, articleCount: number }) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-      <div className="flex items-center justify-between">
-        <h4 className="text-lg font-bold text-gray-900">{boss.name}</h4>
-        <span className="text-sm text-gray-500">
-          {articleCount}件の記事
-        </span>
+      <div className="flex items-center space-x-3">
+        <div className="flex-shrink-0">
+          {boss.image_url ? (
+            <img
+              src={boss.image_url}
+              alt={boss.name}
+              className="w-12 h-12 object-cover rounded-lg"
+            />
+          ) : (
+            <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">👑</span>
+            </div>
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-lg font-bold text-gray-900 truncate">{boss.name}</h4>
+          <span className="text-sm text-gray-500">
+            {articleCount}件の記事
+          </span>
+        </div>
       </div>
     </div>
   )
@@ -254,9 +298,10 @@ function BossCard({ boss, articleCount }: { boss: Boss, articleCount: number }) 
 
 // メインコンポーネント
 export default async function BossGuidePage() {
-  const [articles, bosses] = await Promise.all([
+  const [articles, bosses, gladius] = await Promise.all([
     getBossGuideArticles(),
-    getNightreignBosses()
+    getNightreignBosses(),
+    getGladius()
   ])
 
   const breadcrumbItems = [
@@ -277,7 +322,15 @@ export default async function BossGuidePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
-                <span className="text-6xl mr-4">👑</span>
+                {gladius?.image_url ? (
+                  <img
+                    src={gladius.image_url}
+                    alt="グラディウス"
+                    className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border-2 border-white shadow-lg mr-4"
+                  />
+                ) : (
+                  <span className="text-6xl mr-4">👑</span>
+                )}
                 <h1 className="text-4xl md:text-5xl font-bold">
                   夜の王攻略
                 </h1>
@@ -370,7 +423,17 @@ export default async function BossGuidePage() {
             </section>
           ) : (
             <section className="text-center py-16">
-              <div className="text-6xl mb-4">👑</div>
+              <div className="mb-4">
+                {gladius?.image_url ? (
+                  <img
+                    src={gladius.image_url}
+                    alt="グラディウス"
+                    className="w-24 h-24 object-cover rounded-lg border-2 border-gray-300 shadow-lg mx-auto"
+                  />
+                ) : (
+                  <div className="text-6xl">👑</div>
+                )}
+              </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">夜の王攻略記事準備中</h2>
               <p className="text-gray-600 mb-8">
                 夜の王の攻略記事は現在準備中です。<br />
@@ -392,9 +455,20 @@ export default async function BossGuidePage() {
         {/* Call to Action */}
         <section className="bg-gradient-to-r from-red-600 to-red-700 text-white mt-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              👑 夜の王を攻略しよう！
-            </h2>
+            <div className="flex items-center justify-center mb-4">
+              {gladius?.image_url ? (
+                <img
+                  src={gladius.image_url}
+                  alt="グラディウス"
+                  className="w-12 h-12 object-cover rounded-lg border-2 border-white shadow-lg mr-3"
+                />
+              ) : (
+                <span className="text-3xl mr-3">👑</span>
+              )}
+              <h2 className="text-3xl font-bold">
+                夜の王を攻略しよう！
+              </h2>
+            </div>
             <p className="text-xl mb-8 leading-relaxed">
               各ボスには独特の攻撃パターンと弱点があります。<br />
               YouTube動画で戦術を学んでから挑戦することで、勝率が大幅に向上します！
