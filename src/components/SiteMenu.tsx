@@ -276,6 +276,13 @@ export default function SiteMenu() {
                 <h3 className="text-lg font-semibold mb-3 text-gray-300">ナビゲーション</h3>
                 <nav className="space-y-2">
                   <Link
+                    href="/"
+                    onClick={() => setIsOpen(false)}
+                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    🏠 トップページに戻る
+                  </Link>
+                  <Link
                     href="/articles"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
