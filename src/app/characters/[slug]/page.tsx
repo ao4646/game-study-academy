@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import StructuredData, { BreadcrumbStructuredData } from '@/components/StructuredData'
 
 // Supabaseクライアント設定
@@ -55,18 +56,36 @@ interface CharacterClass {
 interface ArticleWithRelations {
   article: Article
   video: Video
-  character_class: CharacterClass | null
 }
 
-// キャラ別解説記事取得関数
-async function getCharacterGuideArticles(): Promise<ArticleWithRelations[]> {
+// キャラクター取得関数
+async function getCharacterBySlug(slug: string): Promise<CharacterClass | null> {
+  try {
+    const { data: character, error } = await supabase
+      .from('classes')
+      .select('*')
+      .eq('slug', slug)
+      .single()
+
+    if (error || !character) {
+      return null
+    }
+
+    return character
+  } catch (error) {
+    console.error('キャラクター取得に失敗しました:', error)
+    return null
+  }
+}
+
+// キャラクター解説記事取得関数
+async function getCharacterArticles(characterId: number): Promise<ArticleWithRelations[]> {
   try {
     const { data: articles, error: articlesError } = await supabase
       .from('articles')
       .select('*')
       .eq('published', true)
-      .eq('game_id', 1) // ナイトレイン
-      .not('related_classes_id', 'is', null)
+      .eq('related_classes_id', characterId)
       .order('created_at', { ascending: false })
 
     if (articlesError || !articles) {
@@ -83,24 +102,10 @@ async function getCharacterGuideArticles(): Promise<ArticleWithRelations[]> {
         .eq('id', article.video_id)
         .single()
 
-      let character_class = null
-      if (article.related_classes_id) {
-        const { data: classData, error: classError } = await supabase
-          .from('classes')
-          .select('*')
-          .eq('id', article.related_classes_id)
-          .single()
-
-        if (!classError) {
-          character_class = classData
-        }
-      }
-
       if (video && !videoError) {
         articlesWithRelations.push({
           article,
-          video,
-          character_class
+          video
         })
       }
     }
@@ -112,87 +117,47 @@ async function getCharacterGuideArticles(): Promise<ArticleWithRelations[]> {
   }
 }
 
-// ナイトレインクラス取得
-async function getNightreignClasses(): Promise<CharacterClass[]> {
-  try {
-    const { data: classes, error } = await supabase
-      .from('classes')
-      .select('*')
-      .eq('game_id', 1) // ナイトレイン
-      .order('id')
-
-    if (error || !classes) {
-      console.error('クラス取得エラー:', error)
-      return []
-    }
-
-    return classes
-  } catch (error) {
-    console.error('クラス取得に失敗しました:', error)
-    return []
-  }
-}
-
-// 無頼漢（ID:1）取得
-async function getScoundrel(): Promise<CharacterClass | null> {
-  try {
-    const { data: character, error } = await supabase
-      .from('classes')
-      .select('*')
-      .eq('id', 1)
-      .single()
-
-    if (error || !character) {
-      console.error('無頼漢取得エラー:', error)
-      return null
-    }
-
-    return character
-  } catch (error) {
-    console.error('無頼漢取得に失敗しました:', error)
-    return null
-  }
-}
-
 // メタデータ生成
-export function generateMetadata(): Metadata {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const character = await getCharacterBySlug(slug)
+  
+  if (!character) {
+    return {
+      title: 'キャラクターが見つかりません - Game Study Academy'
+    }
+  }
+
   return {
-    title: 'ナイトレイン キャラ別解説記事一覧 - Game Study Academy',
-    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）のキャラ別解説記事一覧。無頼漢、追跡者、復讐者など各夜渡りキャラクターの詳細解説をYouTube動画から学習できます。',
+    title: `${character.name}解説記事一覧 - Game Study Academy`,
+    description: `エルデンリング：ナイトレイン（Elden Ring: Nightreign）の${character.name}解説記事一覧。${character.name}の詳細な使い方をYouTube動画から学習できます。`,
     keywords: [
       'ナイトレイン',
       'Nightreign',
+      character.name,
       'キャラ別解説',
       '夜渡り',
-      '無頼漢',
-      '追跡者',
-      '復讐者',
-      '鉄の目',
       'YouTube',
       '動画学習'
     ],
     openGraph: {
       type: 'website',
       locale: 'ja_JP',
-      url: 'https://game-study-academy.com/categories/2',
+      url: `https://game-study-academy.com/characters/${character.slug}`,
       siteName: 'Game Study Academy',
-      title: 'ナイトレイン キャラ別解説記事一覧 - Game Study Academy',
-      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）のキャラ別解説記事一覧。各夜渡りキャラクターの詳細解説をYouTube動画から学習できます。',
+      title: `${character.name}解説記事一覧 - Game Study Academy`,
+      description: `エルデンリング：ナイトレイン（Elden Ring: Nightreign）の${character.name}解説記事一覧。詳細な使い方をYouTube動画から学習できます。`,
+      images: character.image_url ? [{ url: character.image_url }] : undefined,
     },
     alternates: {
-      canonical: 'https://game-study-academy.com/categories/2',
+      canonical: `https://game-study-academy.com/characters/${character.slug}`,
     },
   }
 }
 
-// YouTubeサムネイル取得関数
-function getYouTubeThumbnail(videoId: string): string {
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-}
-
 // 記事カードコンポーネント
 function ArticleCard({ data }: { data: ArticleWithRelations }) {
-  const { article, video, character_class } = data
+  const { article, video } = data
   const thumbnailUrl = video.thumbnail_url
   const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP')
 
@@ -207,7 +172,7 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
           />
           <div className="absolute top-3 left-3">
             <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              キャラ別解説
+              キャラ解説
             </span>
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -220,21 +185,6 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
         </div>
 
         <div className="p-6">
-          {character_class && (
-            <div className="flex items-center mb-3">
-              {character_class.image_url ? (
-                <img
-                  src={character_class.image_url}
-                  alt={character_class.name}
-                  className="w-8 h-8 object-cover rounded mr-2"
-                />
-              ) : (
-                <span className="text-2xl mr-2">👤</span>
-              )}
-              <span className="text-lg font-bold text-blue-600">{character_class.name}</span>
-            </div>
-          )}
-          
           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
             {article.seo_title || article.title}
           </h3>
@@ -259,50 +209,23 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
   )
 }
 
-// キャラクタークラスカードコンポーネント
-function CharacterCard({ character_class, articleCount }: { character_class: CharacterClass, articleCount: number }) {
-  return (
-    <Link href={`/characters/${character_class.slug}`} className="block">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 cursor-pointer">
-        <div className="flex items-center space-x-3">
-          <div className="flex-shrink-0">
-            {character_class.image_url ? (
-              <img
-                src={character_class.image_url}
-                alt={character_class.name}
-                className="w-12 h-12 object-cover rounded-lg"
-              />
-            ) : (
-              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">👤</span>
-              </div>
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-lg font-bold text-gray-900 truncate hover:text-blue-600 transition-colors">{character_class.name}</h4>
-            <span className="text-sm text-gray-500">
-              {articleCount}件の記事
-            </span>
-          </div>
-        </div>
-      </div>
-    </Link>
-  )
-}
-
 // メインコンポーネント
-export default async function CharacterGuidePage() {
-  const [articles, classes, scoundrel] = await Promise.all([
-    getCharacterGuideArticles(),
-    getNightreignClasses(),
-    getScoundrel()
-  ])
+export default async function CharacterDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const character = await getCharacterBySlug(slug)
+  
+  if (!character) {
+    notFound()
+  }
+
+  const articles = await getCharacterArticles(character.id)
 
   const breadcrumbItems = [
     { name: 'ホーム', url: 'https://game-study-academy.com' },
     { name: '記事一覧', url: 'https://game-study-academy.com/articles' },
     { name: 'ナイトレイン', url: 'https://game-study-academy.com/games/nightreign' },
-    { name: 'キャラ別解説', url: 'https://game-study-academy.com/categories/2' }
+    { name: 'キャラ別解説', url: 'https://game-study-academy.com/categories/2' },
+    { name: character.name, url: `https://game-study-academy.com/characters/${character.slug}` }
   ]
 
   return (
@@ -316,35 +239,36 @@ export default async function CharacterGuidePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
-                {scoundrel?.image_url ? (
+                {character.image_url ? (
                   <img
-                    src={scoundrel.image_url}
-                    alt="無頼漢"
+                    src={character.image_url}
+                    alt={character.name}
                     className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border-2 border-white shadow-lg mr-4"
                   />
                 ) : (
                   <span className="text-6xl mr-4">👤</span>
                 )}
                 <h1 className="text-4xl md:text-5xl font-bold">
-                  キャラ別解説
+                  {character.name}解説
                 </h1>
               </div>
-              <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                ナイトレインの夜渡り（キャラクター）について詳しく解説。<br />
-                各キャラの特性と効果的な使い方をYouTube動画から学習しましょう。
-              </p>
+              {character.description && (
+                <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
+                  {character.description}
+                </p>
+              )}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/beginner/nightreign"
+                  href="/categories/2"
                   className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
                 >
-                  🌙 初心者ガイド
+                  👤 キャラ別解説一覧
                 </Link>
                 <Link
-                  href="/games/nightreign"
+                  href="/beginner/nightreign"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
                 >
-                  📚 ナイトレイン記事一覧
+                  🌙 初心者ガイド
                 </Link>
               </div>
             </div>
@@ -374,7 +298,13 @@ export default async function CharacterGuidePage() {
               </li>
               <li><span className="text-gray-400">/</span></li>
               <li>
-                <span className="text-gray-900 font-medium">キャラ別解説</span>
+                <Link href="/categories/2" className="text-gray-500 hover:text-gray-700">
+                  キャラ別解説
+                </Link>
+              </li>
+              <li><span className="text-gray-400">/</span></li>
+              <li>
+                <span className="text-gray-900 font-medium">{character.name}</span>
               </li>
             </ol>
           </nav>
@@ -382,32 +312,11 @@ export default async function CharacterGuidePage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* キャラクター一覧セクション */}
-          {classes.length > 0 && (
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">👤 夜渡り（キャラクター）一覧</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {classes.map((character_class) => {
-                  const articleCount = articles.filter(article => 
-                    article.character_class?.id === character_class.id
-                  ).length
-                  return (
-                    <CharacterCard 
-                      key={character_class.id} 
-                      character_class={character_class} 
-                      articleCount={articleCount}
-                    />
-                  )
-                })}
-              </div>
-            </section>
-          )}
-
           {/* 解説記事一覧 */}
           {articles.length > 0 ? (
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                📖 キャラ別解説記事 ({articles.length}件)
+                📖 {character.name}解説記事 ({articles.length}件)
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {articles.map((data) => (
@@ -418,26 +327,26 @@ export default async function CharacterGuidePage() {
           ) : (
             <section className="text-center py-16">
               <div className="mb-4">
-                {scoundrel?.image_url ? (
+                {character.image_url ? (
                   <img
-                    src={scoundrel.image_url}
-                    alt="無頼漢"
+                    src={character.image_url}
+                    alt={character.name}
                     className="w-24 h-24 object-cover rounded-lg border-2 border-gray-300 shadow-lg mx-auto"
                   />
                 ) : (
                   <div className="text-6xl">👤</div>
                 )}
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">キャラ別解説記事準備中</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{character.name}解説記事準備中</h2>
               <p className="text-gray-600 mb-8">
-                キャラクター別の解説記事は現在準備中です。<br />
+                {character.name}の解説記事は現在準備中です。<br />
                 リリース後に順次追加予定ですので、お楽しみに！
               </p>
               <Link
-                href="/beginner/nightreign"
+                href="/categories/2"
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                🌙 初心者ガイドを見る
+                👤 他のキャラ解説を見る
                 <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                 </svg>
@@ -450,35 +359,35 @@ export default async function CharacterGuidePage() {
         <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white mt-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
             <div className="flex items-center justify-center mb-4">
-              {scoundrel?.image_url ? (
+              {character.image_url ? (
                 <img
-                  src={scoundrel.image_url}
-                  alt="無頼漢"
+                  src={character.image_url}
+                  alt={character.name}
                   className="w-12 h-12 object-cover rounded-lg border-2 border-white shadow-lg mr-3"
                 />
               ) : (
                 <span className="text-3xl mr-3">👤</span>
               )}
               <h2 className="text-3xl font-bold">
-                あなたに最適なキャラを見つけよう！
+                {character.name}をマスターしよう！
               </h2>
             </div>
             <p className="text-xl mb-8 leading-relaxed">
-              各キャラクターには独特のプレイスタイルと特殊能力があります。<br />
-              YouTube動画で詳しい使い方を学んで、自分に合ったキャラを見つけましょう！
+              YouTube動画で詳しい使い方を学んで、{character.name}の特性を活かしたプレイを身につけましょう！<br />
+              他のキャラクター解説も併せてチェックしてみてください。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/beginner/nightreign"
+                href="/categories/2"
                 className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
               >
-                🌙 初心者ガイド
+                👤 キャラ別解説一覧
               </Link>
               <Link
-                href="/games/nightreign"
+                href="/beginner/nightreign"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-blue-600"
               >
-                📚 ナイトレイン記事一覧
+                🌙 初心者ガイド
               </Link>
             </div>
           </div>

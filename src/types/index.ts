@@ -145,7 +145,7 @@ export interface Boss {
   name: string
   slug: string
   description: string | null
-  difficulty: number | null
+  weekpoints: string[] | null
   game_id: number | null
   created_at: string
   image_url: string | null
