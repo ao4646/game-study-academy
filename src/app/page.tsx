@@ -634,36 +634,61 @@ export default async function HomePage() {
         {/* フッター */}
         <footer className="bg-gray-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
                 <h3 className="text-xl font-bold mb-4">Game Study Academy</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-gray-400 leading-relaxed mb-4">
                   YouTube動画から学ぶゲーム徹底攻略サイト。<br />
                   実況者の知識とテクニックを文字で学習できます。
                 </p>
+                <div className="flex items-center">
+                  <span className="text-2xl mr-2">🎮</span>
+                  <span className="text-sm text-gray-400">エルデンリング・ナイトレイン専門</span>
+                </div>
               </div>
+              
               <div>
-                <h4 className="text-lg font-semibold mb-4">攻略カテゴリ</h4>
+                <h4 className="text-lg font-semibold mb-4">🌙 ナイトレイン</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><Link href="#" className="hover:text-white transition-colors">夜の王攻略</Link></li>
-                  <li><Link href="#" className="hover:text-white transition-colors">キャラ別解説</Link></li>
-                  <li><Link href="#" className="hover:text-white transition-colors">戦術</Link></li>
-                  <li><Link href="#" className="hover:text-white transition-colors">地変攻略</Link></li>
+                  <li><Link href="/games/nightreign" className="hover:text-white transition-colors">📚 ナイトレイン記事一覧</Link></li>
+                  <li><Link href="/beginner/nightreign" className="hover:text-white transition-colors">🔰 ナイトレイン初心者ガイド</Link></li>
+                  <li><Link href="/categories/1" className="hover:text-white transition-colors">👑 夜の王攻略</Link></li>
+                  <li><Link href="/categories/2" className="hover:text-white transition-colors">👤 キャラ別解説</Link></li>
                 </ul>
               </div>
+              
               <div>
-                <h4 className="text-lg font-semibold mb-4">サイト情報</h4>
+                <h4 className="text-lg font-semibold mb-4">⚔️ エルデンリング</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><Link href="/articles" className="hover:text-white transition-colors">記事一覧</Link></li>
-                  <li><Link href="/beginner" className="hover:text-white transition-colors">エルデンリング初心者ガイド</Link></li>
-                  <li><Link href="/beginner/nightreign" className="hover:text-white transition-colors">ナイトレイン初心者ガイド</Link></li>
-                  <li><Link href="#" className="hover:text-white transition-colors">サイトについて</Link></li>
-                  <li><Link href="#" className="hover:text-white transition-colors">お問い合わせ</Link></li>
+                  <li><Link href="/games/elden-ring" className="hover:text-white transition-colors">📚 エルデンリング記事一覧</Link></li>
+                  <li><Link href="/beginner" className="hover:text-white transition-colors">🔰 エルデンリング初心者ガイド</Link></li>
+                  <li><Link href="/articles?game=elden-ring" className="hover:text-white transition-colors">🗺️ エリア攻略</Link></li>
+                  <li><Link href="/articles?game=elden-ring" className="hover:text-white transition-colors">⚔️ ボス攻略</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-semibold mb-4">📚 サイト情報</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/articles" className="hover:text-white transition-colors">📋 記事一覧</Link></li>
+                  <li><Link href="/admin" className="hover:text-white transition-colors">⚙️ 管理者ページ</Link></li>
                 </ul>
               </div>
             </div>
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-              <p>&copy; 2025 Game Study Academy. All rights reserved.</p>
+            
+            <div className="border-t border-gray-800 mt-8 pt-8">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div className="text-center md:text-left mb-4 md:mb-0">
+                  <p className="text-gray-400 text-sm">
+                    &copy; 2025 Game Study Academy. All rights reserved.
+                  </p>
+                </div>
+                <div className="flex items-center space-x-4 text-sm text-gray-400">
+                  <span>🎮 エルデンリング・ナイトレイン専門</span>
+                  <span>•</span>
+                  <span>📺 YouTube動画から学習</span>
+                </div>
+              </div>
             </div>
           </div>
         </footer>

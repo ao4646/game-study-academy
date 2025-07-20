@@ -149,13 +149,13 @@ export function generateArticleMetadata(
 
 // 記事一覧ページのメタデータ生成
 export function generateArticleListMetadata(): Metadata {
-  const title = 'Nightreign 攻略記事一覧'
+  const title = 'エルデンリング・ナイトレイン 攻略記事一覧'
   const description = 'YouTube動画から学ぶ、厳選された攻略解説記事。プロの実況者たちの知識とテクニックを文字で学習できます。'
   
   return {
     title,
     description,
-    keywords: ['記事一覧', 'ナイトレイン', '攻略記事', 'YouTube', '動画解説'],
+    keywords: ['記事一覧', 'エルデンリング', 'ナイトレイン', '攻略記事', 'YouTube', '動画解説'],
     openGraph: {
       type: 'website',
       locale: 'ja_JP',
@@ -196,7 +196,7 @@ export function generateCategoryMetadata(
   return {
     title,
     description,
-    keywords: [categoryName, '攻略', 'ナイトレイン', 'YouTube', '動画解説'],
+    keywords: [categoryName, '攻略', 'エルデンリング', 'ナイトレイン', 'YouTube', '動画解説'],
     openGraph: {
       type: 'website',
       locale: 'ja_JP',
