@@ -191,7 +191,7 @@ async function getAllFeaturedArticles(limit: number = 4): Promise<ArticleWithRel
 
 // YouTubeサムネイル取得関数
 function getYouTubeThumbnail(videoId: string): string {
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+  return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
 }
 
 // カテゴリ名変換関数
@@ -240,7 +240,7 @@ const eldenRingCategories = [
 // 注目記事カードコンポーネント
 function FeaturedArticleCard({ data, featured = false }: { data: ArticleWithRelations, featured?: boolean }) {
   const { article, video, game } = data
-  const thumbnailUrl = getYouTubeThumbnail(video.video_id)
+  const thumbnailUrl = video.thumbnail_url
   const categoryName = article.categoryName || getCategoryName(article.category_id)
   const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP')
 

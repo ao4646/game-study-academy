@@ -102,6 +102,17 @@ export default function SiteMenu() {
     setCurrentDate(newDate)
   }
 
+  const handleDateClick = (dateString: string, hasArticles: boolean) => {
+    if (hasArticles) {
+      // メニューを閉じてから遷移
+      setIsOpen(false)
+      // 少し遅延を入れてからページ遷移
+      setTimeout(() => {
+        window.location.href = `/articles/date/${dateString}`
+      }, 300)
+    }
+  }
+
   const renderCalendar = () => {
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -117,16 +128,21 @@ export default function SiteMenu() {
       const isCurrentMonth = currentDay.getMonth() === month
       const hasArticles = articlesByDate[day.toString()]?.length > 0
       
+      // 日付文字列を作成 (YYYY-MM-DD形式)
+      const dateString = `${currentDay.getFullYear()}-${String(currentDay.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+      
       days.push(
         <div
           key={i}
           className={`
-            p-2 text-center cursor-pointer transition-colors
+            p-2 text-center cursor-pointer transition-colors rounded
             ${isCurrentMonth ? 'text-white' : 'text-gray-500'}
-            ${hasArticles && isCurrentMonth ? 'text-red-400 font-bold' : ''}
-            hover:bg-gray-600 rounded
+            ${hasArticles && isCurrentMonth ? 'text-yellow-400 font-bold bg-yellow-400/20 hover:bg-yellow-400/30' : ''}
+            ${!hasArticles ? 'hover:bg-gray-600' : ''}
+            ${hasArticles && isCurrentMonth ? 'cursor-pointer' : ''}
           `}
-          title={hasArticles ? `${day}日に${articlesByDate[day.toString()]?.length}件の記事` : ''}
+          title={hasArticles ? `${day}日に${articlesByDate[day.toString()]?.length}件の記事 - クリックして記事一覧を見る` : ''}
+          onClick={() => handleDateClick(dateString, hasArticles && isCurrentMonth)}
         >
           {day}
         </div>

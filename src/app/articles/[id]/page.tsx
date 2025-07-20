@@ -265,7 +265,7 @@ function markdownToHtml(markdown: string): string {
     .replace(/(<li[\s\S]*?<\/li>)/g, '<ul class="list-disc list-inside mb-6 space-y-2 ml-4">$1</ul>')
     .replace(/<\/ul>\s*<ul[^>]*>/g, '')
     .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em class="italic">$1</em>');
+    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-700">$1</em>');
 }
 
 // 記事詳細ページコンポーネント（SEO最適化版）
@@ -330,6 +330,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
                 ))}
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                   {game.name}
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                  {article.read_time}分
                 </span>
               </div>
               

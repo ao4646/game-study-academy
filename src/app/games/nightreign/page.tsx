@@ -196,7 +196,7 @@ function getYouTubeThumbnail(videoId: string): string {
 // 記事カードコンポーネント
 function ArticleCard({ data }: { data: ArticleWithRelations }) {
   const { article, video, categories } = data
-  const thumbnailUrl = getYouTubeThumbnail(video.video_id)
+  const thumbnailUrl = video.thumbnail_url
   const categoryName = categories.length > 0 ? categories[0].name : 'カテゴリ未設定'
   const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP')
 
