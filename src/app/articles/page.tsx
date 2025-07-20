@@ -212,8 +212,32 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
 
 // カテゴリカードコンポーネント
 function CategoryCard({ category, gameSlug, articleCount }: { category: Category, gameSlug: string, articleCount: number }) {
+  // カテゴリ名に基づいて適切なリンクを決定
+  const getHref = (categoryName: string) => {
+    switch (categoryName) {
+      case '夜の王攻略':
+        return '/categories/1'
+      case 'キャラ別解説':
+        return '/categories/2'
+      case '戦術':
+        return '/strategies'
+      case '地変攻略':
+        return '/dungeons'
+      case '小ネタ・裏技':
+        return '/tips'
+      case '追憶関連':
+        return '/stories'
+      case '考察系':
+        return '/analysis'
+      case '初心者向け':
+        return '/beginners'
+      default:
+        return `/categories/${category.id}`
+    }
+  }
+
   return (
-    <Link href={`/categories/${category.id}`} className="block group">
+    <Link href={getHref(category.name)} className="block group">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
         <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
           {category.name}

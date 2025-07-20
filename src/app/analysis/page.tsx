@@ -17,7 +17,6 @@ interface Article {
   summary: string
   video_id: number
   game_id: number
-  category_id: number
   published: boolean
   created_at: string
   updated_at: string
@@ -27,7 +26,6 @@ interface Article {
   slug: string | null
   featured_image_url: string | null
   read_time: number
-  categoryName?: string
 }
 
 interface Video {
@@ -42,35 +40,36 @@ interface Video {
   game_id: number
 }
 
-interface Game {
-  id: number
-  name: string
-  slug: string
-  description: string
-}
-
 interface Category {
   id: number
   name: string
   slug: string
-  game_id: number
+  jp_name: string
+  parent_id: number | null
+  icon: string | null
+  description: string | null
+  url_path: string
+  sort_order: number | null
+  is_active: boolean | null
+  created_at: string
+  image_url: string | null
+  icon_url: string | null
 }
 
 interface ArticleWithRelations {
   article: Article
   video: Video
-  game: Game
   categories: Category[]
 }
 
-// ナイトレイン記事取得関数
-async function getNightreignArticles(): Promise<ArticleWithRelations[]> {
+// 考察系記事取得関数
+async function getAnalysisArticles(): Promise<ArticleWithRelations[]> {
   try {
     const { data: articles, error: articlesError } = await supabase
       .from('articles')
       .select('*')
       .eq('published', true)
-      .eq('game_id', 1) // ナイトレインのgame_id
+      .eq('game_id', 1) // ナイトレイン
       .order('created_at', { ascending: false })
 
     if (articlesError || !articles) {
@@ -87,12 +86,6 @@ async function getNightreignArticles(): Promise<ArticleWithRelations[]> {
         .eq('id', article.video_id)
         .single()
 
-      const { data: game, error: gameError } = await supabase
-        .from('games')
-        .select('*')
-        .eq('id', article.game_id)
-        .single()
-
       // カテゴリ情報を取得
       const { data: articleCategories, error: categoryError } = await supabase
         .from('article_categories')
@@ -104,11 +97,15 @@ async function getNightreignArticles(): Promise<ArticleWithRelations[]> {
         categories = articleCategories.map((ac: any) => ac.categories).filter(Boolean)
       }
 
-      if (video && game && !videoError && !gameError) {
+      // 考察系カテゴリを含む記事のみフィルタ
+      const hasAnalysisCategory = categories.some(cat => 
+        cat.name.includes('考察') || cat.jp_name?.includes('考察')
+      )
+
+      if (video && !videoError && hasAnalysisCategory) {
         articlesWithRelations.push({
           article,
           video,
-          game,
           categories
         })
       }
@@ -121,83 +118,41 @@ async function getNightreignArticles(): Promise<ArticleWithRelations[]> {
   }
 }
 
-// ナイトレインカテゴリ取得
-async function getNightreignCategories(): Promise<Category[]> {
-  try {
-    const { data: categories, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('game_id', 1) // ナイトレインのgame_id
-      .order('id')
-
-    if (error || !categories) {
-      console.error('カテゴリ取得エラー:', error)
-      return []
-    }
-
-    return categories
-  } catch (error) {
-    console.error('カテゴリ取得に失敗しました:', error)
-    return []
-  }
-}
-
 // メタデータ生成
 export function generateMetadata(): Metadata {
   return {
-    title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
+    title: 'ナイトレイン 考察系記事一覧 - Game Study Academy',
+    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の考察系記事一覧。世界観やストーリーに関する深い考察をYouTube動画から学習できます。',
     keywords: [
       'ナイトレイン',
       'Nightreign',
-      'エルデンリング',
-      'Elden Ring',
-      '攻略',
-      '記事一覧',
-      '戦術',
-      'ボス攻略',
-      'キャラクター解説',
+      '考察系',
+      '世界観',
+      'ストーリー',
+      '設定',
+      'バックストーリー',
       'YouTube',
       '動画学習'
     ],
     openGraph: {
       type: 'website',
       locale: 'ja_JP',
-      url: 'https://game-study-academy.com/games/nightreign',
+      url: 'https://game-study-academy.com/analysis',
       siteName: 'Game Study Academy',
-      title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
-      images: [
-        {
-          url: 'https://game-study-academy.com/og-image.jpg',
-          width: 1200,
-          height: 630,
-          alt: 'Game Study Academy - ナイトレイン攻略記事一覧',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
-      images: ['https://game-study-academy.com/og-image.jpg'],
+      title: 'ナイトレイン 考察系記事一覧 - Game Study Academy',
+      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の考察系記事一覧。世界観やストーリーに関する深い考察をYouTube動画から学習できます。',
     },
     alternates: {
-      canonical: 'https://game-study-academy.com/games/nightreign',
+      canonical: 'https://game-study-academy.com/analysis',
     },
   }
-}
-
-// YouTubeサムネイル取得関数
-function getYouTubeThumbnail(videoId: string): string {
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
 }
 
 // 記事カードコンポーネント
 function ArticleCard({ data }: { data: ArticleWithRelations }) {
   const { article, video, categories } = data
   const thumbnailUrl = video.thumbnail_url
-  const categoryName = categories.length > 0 ? categories[0].name : 'カテゴリ未設定'
+  const categoryName = categories.length > 0 ? categories[0].name : '考察系'
   const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP')
 
   return (
@@ -210,8 +165,8 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute top-3 left-3">
-            <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              {categoryName}
+            <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+              考察系
             </span>
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -224,7 +179,12 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
         </div>
 
         <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-purple-600 transition-colors">
+          <div className="flex items-center mb-3">
+            <span className="text-2xl mr-2">🤔</span>
+            <span className="text-lg font-bold text-indigo-600">{categoryName}</span>
+          </div>
+          
+          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-indigo-600 transition-colors">
             {article.seo_title || article.title}
           </h3>
           
@@ -248,58 +208,15 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
   )
 }
 
-// カテゴリカードコンポーネント
-function CategoryCard({ category, articleCount }: { category: Category, articleCount: number }) {
-  // カテゴリ名に基づいて適切なリンクを決定
-  const getHref = (categoryName: string) => {
-    switch (categoryName) {
-      case '夜の王攻略':
-        return '/categories/1'
-      case 'キャラ別解説':
-        return '/categories/2'
-      case '戦術':
-        return '/strategies'
-      case '地変攻略':
-        return '/dungeons'
-      case '小ネタ・裏技':
-        return '/tips'
-      case '追憶関連':
-        return '/stories'
-      case '考察系':
-        return '/analysis'
-      case '初心者向け':
-        return '/beginners'
-      default:
-        return `/categories/${category.id}`
-    }
-  }
-
-  return (
-    <Link href={getHref(category.name)} className="block group">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-purple-300">
-        <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-          {category.name}
-        </h4>
-        <p className="text-sm text-gray-600">
-          {articleCount}件の記事
-        </p>
-      </div>
-    </Link>
-  )
-}
-
-
 // メインコンポーネント
-export default async function NightreignPage() {
-  const [articles, categories] = await Promise.all([
-    getNightreignArticles(),
-    getNightreignCategories()
-  ])
+export default async function AnalysisPage() {
+  const articles = await getAnalysisArticles()
 
   const breadcrumbItems = [
     { name: 'ホーム', url: 'https://game-study-academy.com' },
     { name: '記事一覧', url: 'https://game-study-academy.com/articles' },
-    { name: 'ナイトレイン', url: 'https://game-study-academy.com/games/nightreign' }
+    { name: 'ナイトレイン', url: 'https://game-study-academy.com/games/nightreign' },
+    { name: '考察系', url: 'https://game-study-academy.com/analysis' }
   ]
 
   return (
@@ -309,31 +226,31 @@ export default async function NightreignPage() {
 
       <div className="min-h-screen bg-gray-50">
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-purple-600 to-violet-700 text-white">
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
-                <span className="text-6xl mr-4">🌙</span>
+                <span className="text-6xl mr-4">🤔</span>
                 <h1 className="text-4xl md:text-5xl font-bold">
-                  ナイトレイン攻略記事
+                  考察系
                 </h1>
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略情報を網羅。<br />
-                プロ実況者の動画から学ぶ戦術とテクニックを文字で効率的に学習しましょう。
+                ナイトレインの世界観やストーリーに関する深い考察記事。<br />
+                設定やバックストーリーを探求してゲームをより深く理解しましょう。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/beginner/nightreign"
-                  className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
+                  className="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
                 >
                   🌙 初心者ガイド
                 </Link>
                 <Link
-                  href="/articles"
-                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
+                  href="/games/nightreign"
+                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-indigo-600"
                 >
-                  📚 全記事一覧
+                  📚 ナイトレイン記事一覧
                 </Link>
               </div>
             </div>
@@ -349,19 +266,21 @@ export default async function NightreignPage() {
                   ホーム
                 </Link>
               </li>
-              <li>
-                <span className="text-gray-400">/</span>
-              </li>
+              <li><span className="text-gray-400">/</span></li>
               <li>
                 <Link href="/articles" className="text-gray-500 hover:text-gray-700">
                   記事一覧
                 </Link>
               </li>
+              <li><span className="text-gray-400">/</span></li>
               <li>
-                <span className="text-gray-400">/</span>
+                <Link href="/games/nightreign" className="text-gray-500 hover:text-gray-700">
+                  ナイトレイン
+                </Link>
               </li>
+              <li><span className="text-gray-400">/</span></li>
               <li>
-                <span className="text-gray-900 font-medium">ナイトレイン</span>
+                <span className="text-gray-900 font-medium">考察系</span>
               </li>
             </ol>
           </nav>
@@ -369,32 +288,11 @@ export default async function NightreignPage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* カテゴリ一覧 */}
-          {categories.length > 0 && (
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">🗂️ カテゴリ別攻略</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                {categories.map((category) => {
-                  const articleCount = articles.filter(article => 
-                    article.categories.some(cat => cat.id === category.id)
-                  ).length
-                  return (
-                    <CategoryCard 
-                      key={category.id} 
-                      category={category} 
-                      articleCount={articleCount}
-                    />
-                  )
-                })}
-              </div>
-            </section>
-          )}
-
-          {/* 記事一覧 */}
+          {/* 考察系記事一覧 */}
           {articles.length > 0 ? (
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                📚 最新攻略記事 ({articles.length}件)
+                🧠 考察系記事 ({articles.length}件)
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {articles.map((data) => (
@@ -404,15 +302,17 @@ export default async function NightreignPage() {
             </section>
           ) : (
             <section className="text-center py-16">
-              <div className="text-6xl mb-4">🌙</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">ナイトレイン記事準備中</h2>
+              <div className="mb-4">
+                <div className="text-6xl">🤔</div>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">考察系記事準備中</h2>
               <p className="text-gray-600 mb-8">
-                ナイトレインの攻略記事は現在準備中です。<br />
+                考察系の記事は現在準備中です。<br />
                 リリース後に順次追加予定ですので、お楽しみに！
               </p>
               <Link
                 href="/beginner/nightreign"
-                className="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 🌙 初心者ガイドを見る
                 <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24">
@@ -424,27 +324,30 @@ export default async function NightreignPage() {
         </div>
 
         {/* Call to Action */}
-        <section className="bg-gradient-to-r from-purple-600 to-violet-700 text-white mt-16">
+        <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white mt-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              🌙 ナイトレインを極めよう！
-            </h2>
+            <div className="flex items-center justify-center mb-4">
+              <span className="text-3xl mr-3">🤔</span>
+              <h2 className="text-3xl font-bold">
+                ナイトレインの世界を深く探求しよう！
+              </h2>
+            </div>
             <p className="text-xl mb-8 leading-relaxed">
-              YouTube動画と記事を組み合わせることで、より効率的に攻略法を習得できます。<br />
-              気になる記事があったら、ぜひ元動画も視聴してクリエイターを応援しましょう！
+              考察記事を読むことで、ナイトレインの隠された設定や背景が見えてきます。<br />
+              YouTube動画で詳しい考察を学んで、世界観をより深く味わいましょう！
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/beginner/nightreign"
-                className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
+                className="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105"
               >
                 🌙 初心者ガイド
               </Link>
               <Link
-                href="/articles"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
+                href="/games/nightreign"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-indigo-600"
               >
-                📚 全記事一覧
+                📚 ナイトレイン記事一覧
               </Link>
             </div>
           </div>
