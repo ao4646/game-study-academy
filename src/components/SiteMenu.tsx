@@ -299,6 +299,13 @@ export default function SiteMenu() {
                     🏠 トップページに戻る
                   </Link>
                   <Link
+                    href="/guide"
+                    onClick={() => setIsOpen(false)}
+                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    📖 サイトの使い方ガイド
+                  </Link>
+                  <Link
                     href="/articles"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
@@ -313,6 +320,13 @@ export default function SiteMenu() {
                     🔰 エルデンリング初心者ガイド
                   </Link>
                   <Link
+                    href="/games/elden-ring"
+                    onClick={() => setIsOpen(false)}
+                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    ⚔️ エルデンリングの記事一覧
+                  </Link>
+                  <Link
                     href="/beginner/nightreign"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
@@ -320,18 +334,18 @@ export default function SiteMenu() {
                     🌙 ナイトレイン初心者ガイド
                   </Link>
                   <Link
+                    href="/games/nightreign"
+                    onClick={() => setIsOpen(false)}
+                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    🌙 ナイトレインの記事一覧
+                  </Link>
+                  <Link
                     href="/admin"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
                   >
                     👤 管理人について
-                  </Link>
-                  <Link
-                    href="/games/nightreign"
-                    onClick={() => setIsOpen(false)}
-                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
-                  >
-                    🌙 ナイトレイン(NIGHT REIGN)の記事一覧
                   </Link>
                 </nav>
               </div>

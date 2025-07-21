@@ -418,43 +418,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* サイトの特徴 */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-              なぜGame Study Academyが選ばれるのか
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🎯</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">厳選された高品質コンテンツ</h3>
-                <p className="text-gray-600">
-                  実況者の動画から学べる、本当に役立つ攻略法だけを厳選してお届け
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">スキマ時間で効率学習</h3>
-                <p className="text-gray-600">
-                  記事を読んでから学習することで、動画の理解度UP！一回見れば全部わかる！
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤝</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">YouTuber応援型サイト</h3>
-                <p className="text-gray-600">
-                  元動画の理解促進を促す記事で、クリエイターの利益も守る。
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 注目記事セクション */}
         {allFeaturedArticles.length > 0 && (

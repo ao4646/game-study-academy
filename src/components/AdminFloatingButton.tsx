@@ -48,7 +48,7 @@ export default function AdminFloatingButton() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Link href="/admin">
+      <Link href="/guide">
         <div
           className={`
             relative group cursor-pointer
@@ -63,7 +63,7 @@ export default function AdminFloatingButton() {
             {adminInfo.floating_button_image_url || adminInfo.character_image_url ? (
               <img
                 src={adminInfo.floating_button_image_url || adminInfo.character_image_url || ''}
-                alt={`管理人 ${adminInfo.display_name}`}
+                alt={`${adminInfo.display_name} - サイトの使い方`}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -94,7 +94,7 @@ export default function AdminFloatingButton() {
             whitespace-nowrap transition-all duration-300
             ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
           `}>
-            管理人について
+            サイトの使い方
             <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
           </div>
         </div>

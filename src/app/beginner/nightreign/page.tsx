@@ -288,10 +288,10 @@ export default async function NightreignBeginnerGuidePage() {
                   📚 攻略記事を読む
                 </Link>
                 <Link
-                  href="/categories/8"
+                  href="/beginners"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
                 >
-                  🌙 初心者向け記事
+                  📺 初心者向け動画へ
                 </Link>
               </div>
             </div>
@@ -476,10 +476,10 @@ export default async function NightreignBeginnerGuidePage() {
                 📚 攻略記事を読む
               </Link>
               <Link
-                href="/categories/8"
+                href="/beginner"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-purple-600"
               >
-                🔰 初心者向け記事
+                🔰 エルデンリング初心者ガイド
               </Link>
             </div>
           </div>

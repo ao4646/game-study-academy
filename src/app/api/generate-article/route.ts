@@ -13,6 +13,7 @@ interface GenerateArticleRequest {
   related_tip_id?: number;
   related_dungeon_id?: number;
   related_story_id?: number;
+  transcript_text?: string; // 手動で送信される文字起こしテキスト
 }
 
 export async function POST(request: NextRequest) {
@@ -28,7 +29,8 @@ export async function POST(request: NextRequest) {
       related_classes_id,
       related_tip_id,
       related_dungeon_id,
-      related_story_id
+      related_story_id,
+      transcript_text
     }: GenerateArticleRequest = await request.json();
     
     // category_idが指定されている場合、category_idsに追加
@@ -68,6 +70,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('動画データ取得:', video.title);
+
+    // 手動送信された文字起こしの処理
+    const hasTranscript = transcript_text && transcript_text.trim().length > 0;
+    console.log('文字起こしデータ:', hasTranscript ? `あり (${transcript_text.length}文字)` : 'なし');
 
     // 関連コンテンツ情報を取得してプロンプトに追加
     let relatedContentInfo = '';
@@ -166,7 +172,13 @@ export async function POST(request: NextRequest) {
       gameDescription: 'FromSoftware最新作の協力型アクションRPG「ナイトレイン」'
     };
 
-    // Claude APIで記事生成（ゲーム別対応の改良版プロンプト）
+    // 文字起こし情報の準備
+    const transcriptInfo = hasTranscript ? 
+      `\n【動画の実際の内容（音声文字起こし）】
+実際の解説内容: ${transcript_text.substring(0, 1500)}${transcript_text.length > 1500 ? '...' : ''}` :
+      '\n※文字起こしなしのため、タイトル・説明文から推定して記事を作成';
+
+    // Claude APIで記事生成（手動文字起こし対応版プロンプト）
     const prompt = `
 あなたは「YouTube動画から学ぶ」ゲーム攻略サイトの専門ライターです。
 ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意図を満たし、動画視聴を促進する高品質記事を書いてください。
@@ -176,7 +188,7 @@ ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意�
 タイトル: ${video.title}
 説明: ${video.description}
 チャンネル: ${video.channel_title}
-投稿日: ${video.published_at}${categoryInfo}${relatedContentInfo}
+投稿日: ${video.published_at}${categoryInfo}${relatedContentInfo}${transcriptInfo}
 
 【記事の独自価値】
 1. YouTube動画学習の優位性を明確化
@@ -189,34 +201,54 @@ ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意�
 - AI生成感を排除した自然な文章
 - 読者の検索意図に直接応える構成
 
-【記事構成（1500文字）】※必ずこの順序で作成してください
+【記事構成例（7.18スタイル）】※この構成を必ず守ってください
+\`\`\`
 # [SEOタイトル]（50-60文字、自然なキーワード配置）
 
-## この動画をおすすめする理由（175文字）※必ず最初に配置
-最終的な視聴促進メッセージ。なぜこの動画を見るべきかを魅力的に説明
+## この動画をおすすめする理由
+（175文字で魅力的な視聴促進メッセージ。最初のセクションとして必須配置）
 
-## この動画で学べる攻略のポイント（150文字）
-具体的な学習価値を3つのポイントで簡潔に
+## この動画で学べる攻略のポイント
+（150文字で具体的な学習価値を3つのポイントで）
 
-## なぜ動画で学ぶべきか（225文字）
-・視覚的理解の優位性
-・リアルタイム戦闘の観察価値  
-・失敗例から学ぶ重要性
+## なぜ動画で学ぶべきか  
+（225文字で視覚的理解・リアルタイム観察・失敗例学習の価値を説明）
 
-## [ボス名/戦術名]攻略の新発見（300文字）
-・動画で明かされる重要な発見
-・従来攻略法との違い（詳細は避ける）
-・なぜこの発見が重要なのか
+## [具体的な攻略対象名]攻略の新発見
+（300文字で動画の重要な発見と従来攻略法との違いを説明）
 
-## 実践で身につく5つのスキル（450文字）
-・判断力向上
-・タイミング習得
-・危機管理能力
-・効率的な学習方法
-・応用力開発
+## 実践で身につく5つのスキル
+（450文字で以下5つのスキルを詳細に説明）
+・判断力向上：（具体的な説明）
+・タイミング習得：（具体的な説明）  
+・危機管理能力：（具体的な説明）
+・効率的な学習方法：（具体的な説明）
+・応用力開発：（具体的な説明）
 
-## 視聴者の成功事例と反響（200文字）
-コメントや反応から見る実際の効果
+## 視聴者の成功事例と反響
+（200文字でコメントや反応から見る実際の効果を説明）
+\`\`\`
+
+${hasTranscript ? `
+【文字起こし活用指示】
+1. 送信された文字起こし内容を基に具体的な戦略・テクニックを詳述
+2. 文字起こしの専門用語や固有名詞を正確に記載
+3. 解説者の具体的なアドバイスやコツを記事に反映
+4. 動画で実際に説明された手順や注意点を盛り込む
+5. 文字起こしから判明した重要ポイントを強調
+6. 文字起こしの内容に基づいて記事の各セクションを充実させる
+` : `
+【記事作成指示】
+文字起こしデータがないため、動画のタイトルと説明文を基に推測して記事を作成してください。
+動画の内容を想像して、魅力的で価値ある記事を作成してください。
+`}
+
+【絶対遵守事項】
+1. 「この動画をおすすめする理由」は最初のセクション（H2）として必ず配置
+2. 上記構成の順序を絶対に変更しない
+3. 各セクションの文字数目安を守る
+4. 5つのスキルは箇条書きで詳細に説明する
+5. 魅力的で自然な文章で動画視聴を促進する
 
 【記事品質基準】
 1. 読者が「動画を見たい」と感じる内容
@@ -225,18 +257,14 @@ ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意�
 4. 独自性のある価値提案
 5. 自然で読みやすい文章
 
-【重要：構成順序の厳守】
-「この動画をおすすめする理由」を必ずタイトル直後の最初のセクションに配置してください。
-他のセクションを最初に持ってくることは絶対に避けてください。
-
-【禁止事項】
-- 具体的攻略手順の詳細記載
-- 動画の完全なネタバレ
-- 冗長で回りくどい表現
-- 意味のない修飾語の多用
+【厳重警告】
+以下を行った場合は記事として不適格とします：
+- 「この動画をおすすめする理由」以外を最初のセクションにする
 - 構成順序の変更
+- 概要や攻略方法などの一般的なセクション名を使用
+- 5つのスキルの詳細説明を省略
 
-1500文字で、動画学習の価値を伝える魅力的な記事を作成してください。
+上記構成例の通りに、1500文字で魅力的な記事を作成してください。
 `;
 
     console.log('Claude API呼び出し開始');
@@ -244,7 +272,7 @@ ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意�
     const response = await anthropic.messages.create({
       model: 'claude-3-5-sonnet-20241022',
       max_tokens: 4000,
-      temperature: 0.7,
+      temperature: 0.4,
       messages: [{
         role: 'user',
         content: prompt
@@ -379,6 +407,11 @@ ${gameContext.gameDescription}の攻略記事を作成し、読者の検索意�
           title: video.title,
           channel: video.channel_title
         }
+      },
+      transcript_info: {
+        provided: hasTranscript,
+        content_length: hasTranscript ? transcript_text.length : 0,
+        source: 'manual_input'
       },
       metrics: {
         content_length: generatedContent.length,
