@@ -147,7 +147,7 @@ function AreaFilter({
     shunning: ['忌み捨て', 'Shunning'],
     snowfield: ['聖別雪原', 'Snowfield'],
     haligtree: ['聖樹', 'Haligtree'],
-    elphael: ['エブルフェール', 'Elphael']
+    elphael: ['エブレフェール', 'Elphael']
   }
 
   // エリア別記事数を計算
@@ -198,7 +198,7 @@ function AreaFilter({
     { key: 'shunning', name: '忌み捨ての地下', section: '寄り道・やり込みエリア' },
     { key: 'snowfield', name: '聖別雪原', section: '寄り道・やり込みエリア' },
     { key: 'haligtree', name: 'ミケラの聖樹', section: '寄り道・やり込みエリア' },
-    { key: 'elphael', name: '聖樹の支えエブルフェール', section: '寄り道・やり込みエリア' }
+    { key: 'elphael', name: '聖樹の支えエブレフェール', section: '寄り道・やり込みエリア' }
   ]
 
   const sections = ['', 'メインエリア', '地下エリア', '寄り道・やり込みエリア']
@@ -268,7 +268,7 @@ export default function AreaArticlesClient({ articles }: { articles: ArticleWith
     shunning: ['忌み捨て', 'Shunning'],
     snowfield: ['聖別雪原', 'Snowfield'],
     haligtree: ['聖樹', 'Haligtree'],
-    elphael: ['エブルフェール', 'Elphael']
+    elphael: ['エブレフェール', 'Elphael']
   }
 
   // 絞り込み処理
