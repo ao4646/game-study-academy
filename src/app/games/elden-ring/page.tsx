@@ -251,8 +251,11 @@ function ArticleCard({ data }: { data: ArticleWithRelations }) {
 
 // カテゴリカードコンポーネント
 function CategoryCard({ category, articleCount }: { category: Category, articleCount: number }) {
+  // エリア攻略(category id=10)の場合は専用ページに遷移
+  const href = category.id === 10 ? '/games/elden-ring/category10' : `/categories/${category.id}`
+  
   return (
-    <Link href={`/categories/${category.id}`} className="block group">
+    <Link href={href} className="block group">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-blue-300">
         <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
           {category.name}
@@ -345,6 +348,7 @@ export default async function EldenRingPage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
           {/* カテゴリ一覧 */}
           {categories.length > 0 && (
             <section className="mb-12">
