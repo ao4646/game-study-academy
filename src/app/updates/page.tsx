@@ -297,38 +297,8 @@ export default async function UpdatesPage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* 注目ゲーム情報 */}
-          {updateNews.some(update => update.featured) && (
-            <section className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                🔥 重要なゲーム情報
-              </h2>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {updateNews
-                  .filter(update => update.featured && (update.game === 'elden-ring' || update.game === 'nightreign'))
-                  .map((update) => (
-                    <UpdateCard key={update.id} update={update} />
-                  ))}
-              </div>
-            </section>
-          )}
-
-          {/* その他の更新情報 */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              📢 その他の更新情報 ({updateNews.filter(update => !update.featured).length}件)
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {updateNews
-                .filter(update => !update.featured)
-                .map((update) => (
-                  <UpdateCard key={update.id} update={update} />
-                ))}
-            </div>
-          </section>
-
           {/* 情報カテゴリ */}
-          <section className="mt-16">
+          <section className="mb-16">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               🏷️ 情報カテゴリ
             </h2>
@@ -365,6 +335,36 @@ export default async function UpdatesPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">サイト機能</h3>
                 <p className="text-sm text-gray-600">新機能・改善情報</p>
               </div>
+            </div>
+          </section>
+
+          {/* 注目ゲーム情報 */}
+          {updateNews.some(update => update.featured) && (
+            <section className="mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                🔥 重要なゲーム情報
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {updateNews
+                  .filter(update => update.featured && (update.game === 'elden-ring' || update.game === 'nightreign'))
+                  .map((update) => (
+                    <UpdateCard key={update.id} update={update} />
+                  ))}
+              </div>
+            </section>
+          )}
+
+          {/* その他の更新情報 */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              📢 その他の更新情報 ({updateNews.filter(update => !update.featured).length}件)
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {updateNews
+                .filter(update => !update.featured)
+                .map((update) => (
+                  <UpdateCard key={update.id} update={update} />
+                ))}
             </div>
           </section>
         </div>
