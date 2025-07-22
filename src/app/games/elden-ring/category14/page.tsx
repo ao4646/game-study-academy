@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import StructuredData, { BreadcrumbStructuredData } from '@/components/StructuredData'
+import EventArticlesClient from './EventArticlesClient'
 
 // Supabaseクライアント設定
 const supabase = createClient(
@@ -134,8 +135,8 @@ async function getCategoryArticles(): Promise<ArticleWithRelations[]> {
 // メタデータ生成
 export function generateMetadata(): Metadata {
   return {
-    title: 'エルデンリング イベント攻略記事一覧 - Game Study Academy',
-    description: 'エルデンリング（Elden Ring）のイベント攻略記事一覧。NPCイベント、サブクエスト、エンディング分岐、隠しイベントなどの攻略情報を網羅。',
+    title: 'エルデンリング イベント関連記事一覧 - Game Study Academy',
+    description: 'エルデンリング（Elden Ring）のイベント関連記事一覧。NPCイベントなどの情報を網羅。',
     keywords: [
       'エルデンリング',
       'Elden Ring',
@@ -176,60 +177,6 @@ export function generateMetadata(): Metadata {
   }
 }
 
-// 記事カードコンポーネント
-function ArticleCard({ data }: { data: ArticleWithRelations }) {
-  const { article, video, categories } = data
-  const thumbnailUrl = video.thumbnail_url
-  const categoryName = categories.length > 0 ? categories[0].name : 'イベント攻略'
-  const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP')
-
-  return (
-    <Link href={`/articles/${article.id}`} className="block group">
-      <article className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-        <div className="relative aspect-video overflow-hidden">
-          <img
-            src={thumbnailUrl}
-            alt={article.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <div className="absolute top-3 left-3">
-            <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              {categoryName}
-            </span>
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-black bg-opacity-70 rounded-full p-3 transition-all duration-300 group-hover:bg-opacity-80">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-purple-600 transition-colors">
-            {article.seo_title || article.title}
-          </h3>
-          
-          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-            {article.meta_description || article.summary?.substring(0, 120) + '...' || 
-             article.content.replace(/[#*\\[\\]]/g, '').substring(0, 120) + '...'}
-          </p>
-
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <span>{createdDate}</span>
-              <span>{article.read_time}分</span>
-            </div>
-            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-              {video.channel_title}
-            </span>
-          </div>
-        </div>
-      </article>
-    </Link>
-  )
-}
 
 // メインコンポーネント
 export default async function EventGuidePage() {
@@ -253,7 +200,7 @@ export default async function EventGuidePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
-                <span className="text-6xl mr-4">⭐</span>
+                <span className="text-6xl mr-4">🎭</span>
                 <h1 className="text-4xl md:text-5xl font-bold">
                   イベント攻略
                 </h1>
@@ -317,44 +264,14 @@ export default async function EventGuidePage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* 記事一覧 */}
-          {articles.length > 0 ? (
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                ⭐ イベント攻略記事 ({articles.length}件)
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {articles.map((data) => (
-                  <ArticleCard key={data.article.id} data={data} />
-                ))}
-              </div>
-            </section>
-          ) : (
-            <section className="text-center py-16">
-              <div className="text-6xl mb-4">⭐</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">イベント攻略記事準備中</h2>
-              <p className="text-gray-600 mb-8">
-                イベント攻略記事は現在準備中です。<br />
-                順次追加予定ですので、お楽しみに！
-              </p>
-              <Link
-                href="/games/elden-ring"
-                className="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-              >
-                🔰 エルデンリング記事一覧を見る
-                <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                </svg>
-              </Link>
-            </section>
-          )}
+          <EventArticlesClient articles={articles} />
         </div>
 
         {/* Call to Action */}
         <section className="bg-gradient-to-r from-purple-600 to-purple-700 text-white mt-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
             <h2 className="text-3xl font-bold mb-4">
-              ⭐ 全イベントを攻略しよう！
+              🎭 全イベントを攻略しよう！
             </h2>
             <p className="text-xl mb-8 leading-relaxed">
               イベント攻略記事で効率的にストーリーを進めましょう。<br />

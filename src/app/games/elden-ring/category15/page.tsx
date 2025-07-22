@@ -134,8 +134,8 @@ async function getCategoryArticles(): Promise<ArticleWithRelations[]> {
 // メタデータ生成
 export function generateMetadata(): Metadata {
   return {
-    title: 'エルデンリング イベント攻略(DLC) 記事一覧 - Game Study Academy',
-    description: 'エルデンリング Shadow of the Erdtree のDLCイベント攻略記事一覧。DLCのNPCイベント、サブクエスト、隠しイベント、エンディング関連の攻略情報を網羅。',
+    title: 'エルデンリング イベント関連(DLC) 記事一覧 - Game Study Academy',
+    description: 'エルデンリング Shadow of the Erdtree のDLCイベント関連記事一覧。DLCのNPCイベント関連の情報を網羅。',
     keywords: [
       'エルデンリング',
       'Elden Ring',

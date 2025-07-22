@@ -304,7 +304,7 @@ export default async function UpdatesPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
-                href="/games/elden-ring"
+                href="/updates/elden-ring"
                 className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300"
               >
                 <div className="text-3xl mb-3">🔰</div>
@@ -313,7 +313,7 @@ export default async function UpdatesPage() {
               </Link>
               
               <Link
-                href="/games/nightreign"
+                href="/updates/nightreign"
                 className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300"
               >
                 <div className="text-3xl mb-3">🌙</div>
@@ -322,7 +322,7 @@ export default async function UpdatesPage() {
               </Link>
               
               <Link
-                href="/articles"
+                href="/updates/articles"
                 className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300"
               >
                 <div className="text-3xl mb-3">📝</div>
@@ -330,11 +330,14 @@ export default async function UpdatesPage() {
                 <p className="text-sm text-gray-600">新規記事・記事追加</p>
               </Link>
               
-              <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center">
+              <Link
+                href="/updates/site"
+                className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300"
+              >
                 <div className="text-3xl mb-3">🔧</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">サイト機能</h3>
                 <p className="text-sm text-gray-600">新機能・改善情報</p>
-              </div>
+              </Link>
             </div>
           </section>
 
