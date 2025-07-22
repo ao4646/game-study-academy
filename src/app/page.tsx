@@ -413,6 +413,12 @@ export default async function HomePage() {
                 >
                   🌙 ナイトレイン初心者ガイド
                 </Link>
+                <Link
+                  href="/updates"
+                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+                >
+                  🔔 アプデ情報
+                </Link>
               </div>
             </div>
           </div>
@@ -589,6 +595,12 @@ export default async function HomePage() {
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
               >
                 🌙 ナイトレイン初心者ガイド
+              </Link>
+              <Link
+                href="/updates"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
+              >
+                🔔 アプデ情報
               </Link>
             </div>
           </div>
