@@ -73,20 +73,58 @@ export default function SiteMenu() {
     }
 
     try {
+      // 複数ワード検索対応: スペースで分割してキーワードを抽出
+      const keywords = query.trim().split(/\s+/).filter(keyword => keyword.length > 0)
+      
+      if (keywords.length === 0) {
+        setSearchResults([])
+        return
+      }
+
+      // 各キーワードに対する検索条件を構築
+      const searchConditions = keywords.map(keyword => 
+        `title.ilike.%${keyword}%,seo_title.ilike.%${keyword}%,content.ilike.%${keyword}%`
+      )
+
+      // 複数ワードの場合はAND検索として処理
+      let searchQuery
+      if (keywords.length === 1) {
+        // 単一ワードの場合
+        searchQuery = `title.ilike.%${keywords[0]}%,seo_title.ilike.%${keywords[0]}%,content.ilike.%${keywords[0]}%`
+      } else {
+        // 複数ワードの場合：各ワードがいずれかのフィールドに含まれることを要求
+        const orConditions = keywords.map(keyword => 
+          `(title.ilike.%${keyword}%,seo_title.ilike.%${keyword}%,content.ilike.%${keyword}%)`
+        ).join(',')
+        searchQuery = orConditions
+      }
+
       const { data: articles, error } = await supabase
         .from('articles')
-        .select('id, title, seo_title, created_at')
+        .select('id, title, seo_title, content, created_at')
         .eq('published', true)
-        .or(`title.ilike.%${query}%,seo_title.ilike.%${query}%,content.ilike.%${query}%`)
+        .or(searchQuery)
         .order('created_at', { ascending: false })
-        .limit(10)
+        .limit(20) // 結果数を20件に増加
 
       if (error) {
         console.error('検索エラー:', error)
         return
       }
 
-      setSearchResults(articles || [])
+      let filteredArticles = articles || []
+
+      // 複数ワード検索の場合、すべてのキーワードが含まれる記事のみをフィルタ
+      if (keywords.length > 1) {
+        filteredArticles = (articles || []).filter(article => {
+          const searchText = `${article.title} ${article.seo_title || ''} ${article.content}`.toLowerCase()
+          return keywords.every(keyword => 
+            searchText.includes(keyword.toLowerCase())
+          )
+        })
+      }
+
+      setSearchResults(filteredArticles)
     } catch (error) {
       console.error('検索中にエラーが発生しました:', error)
     }
@@ -211,7 +249,10 @@ export default function SiteMenu() {
                 
                 {/* 検索結果 */}
                 {searchResults.length > 0 && (
-                  <div className="mt-3 space-y-2 max-h-40 overflow-y-auto">
+                  <div className="mt-3 space-y-2 max-h-60 overflow-y-auto">
+                    <div className="text-xs text-gray-400 mb-2">
+                      {searchResults.length}件の結果が見つかりました
+                    </div>
                     {searchResults.map((article) => (
                       <Link
                         key={article.id}
