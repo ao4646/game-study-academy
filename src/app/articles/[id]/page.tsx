@@ -258,14 +258,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 function markdownToHtml(markdown: string): string {
   return markdown
     .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold mb-6 mt-8 text-gray-900 border-b-2 border-red-500 pb-2">$1</h1>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-800 border-l-4 border-red-500 pl-4">$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-medium mb-3 mt-6 text-gray-700">$1</h3>')
-    .replace(/^\・(.+)$/gm, '<li class="mb-2 text-gray-700 leading-relaxed">$1</li>')
-    .replace(/^([^<\n#\・]+)$/gm, '<p class="mb-4 text-gray-700 leading-relaxed">$1</p>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-900 border-l-4 border-red-500 pl-4">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-medium mb-3 mt-6 text-gray-900">$1</h3>')
+    .replace(/^\・(.+)$/gm, '<li class="mb-2 text-gray-900 leading-relaxed">$1</li>')
+    .replace(/^([^<\n#\・]+)$/gm, '<p class="mb-4 text-gray-900 leading-relaxed">$1</p>')
     .replace(/(<li[\s\S]*?<\/li>)/g, '<ul class="list-disc list-inside mb-6 space-y-2 ml-4">$1</ul>')
     .replace(/<\/ul>\s*<ul[^>]*>/g, '')
     .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-700">$1</em>');
+    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-900">$1</em>');
 }
 
 // 記事詳細ページコンポーネント（SEO最適化版）
