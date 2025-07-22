@@ -277,7 +277,7 @@ export default async function NightreignBeginnerGuidePage() {
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
                 エルデンリング：ナイトレイン（Elden Ring: Nightreign）の世界へようこそ！<br />
-                プロ実況者の知識を基に、初心者の方でも安心してプレイできるよう<br />
+                実況者の知識を基に、初心者の方でも安心してプレイできるよう<br />
                 基本操作から上達のコツまでを丁寧に解説します。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

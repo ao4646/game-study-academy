@@ -432,7 +432,7 @@ export default async function HomePage() {
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">🔥 注目の攻略記事</h2>
                 <p className="text-xl text-gray-600">
-                  プロ実況者から学ぶ、最新の攻略テクニック
+                  実況者から学ぶ、最新の攻略テクニック
                 </p>
               </div>
               

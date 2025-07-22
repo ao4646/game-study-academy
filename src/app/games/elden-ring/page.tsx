@@ -146,7 +146,7 @@ async function getEldenRingCategories(): Promise<Category[]> {
 export function generateMetadata(): Metadata {
   return {
     title: 'エルデンリング (Elden Ring) 攻略記事一覧 - Game Study Academy',
-    description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、プロ実況者の知識を文字で学習できます。',
+    description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、実況者の知識を文字で学習できます。',
     keywords: [
       'エルデンリング',
       'Elden Ring',
@@ -167,7 +167,7 @@ export function generateMetadata(): Metadata {
       url: 'https://game-study-academy.com/games/elden-ring',
       siteName: 'Game Study Academy',
       title: 'エルデンリング (Elden Ring) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、プロ実況者の知識を文字で学習できます。',
+      description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、実況者の知識を文字で学習できます。',
       images: [
         {
           url: 'https://game-study-academy.com/og-image.jpg',
@@ -180,7 +180,7 @@ export function generateMetadata(): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: 'エルデンリング (Elden Ring) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、プロ実況者の知識を文字で学習できます。',
+      description: 'エルデンリング（Elden Ring）の攻略記事一覧。YouTube動画から学ぶボス攻略、エリア攻略、武器・防具、戦技など、実況者の知識を文字で学習できます。',
       images: ['https://game-study-academy.com/og-image.jpg'],
     },
     alternates: {
@@ -301,7 +301,7 @@ export default async function EldenRingPage() {
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
                 エルデンリング（Elden Ring）の攻略情報を網羅。<br />
-                プロ実況者の動画から学ぶボス攻略、エリア攻略、装備解説を文字で効率的に学習しましょう。
+                実況者の動画から学ぶボス攻略、エリア攻略、装備解説を文字で効率的に学習しましょう。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link

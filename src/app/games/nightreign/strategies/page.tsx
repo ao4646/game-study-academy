@@ -158,7 +158,7 @@ async function getSoloStrategy(): Promise<Strategy | null> {
 export function generateMetadata(): Metadata {
   return {
     title: 'ナイトレイン 戦術ガイド - Game Study Academy',
-    description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。プロ実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
+    description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
     keywords: [
       'ナイトレイン',
       'Nightreign',
@@ -177,7 +177,7 @@ export function generateMetadata(): Metadata {
       url: 'https://game-study-academy.com/games/nightreign/strategies',
       siteName: 'Game Study Academy',
       title: 'ナイトレイン 戦術ガイド - Game Study Academy',
-      description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。プロ実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
+      description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
       images: [
         {
           url: 'https://game-study-academy.com/og-image.jpg',
@@ -190,7 +190,7 @@ export function generateMetadata(): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: 'ナイトレイン 戦術ガイド - Game Study Academy',
-      description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。プロ実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
+      description: 'エルデンリング：ナイトレインの戦術・戦闘テクニック記事一覧。実況者から学ぶ効率的な戦闘方法と立ち回りを詳しく解説します。',
       images: ['https://game-study-academy.com/og-image.jpg'],
     },
     alternates: {

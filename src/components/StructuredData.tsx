@@ -80,7 +80,7 @@ export default function StructuredData({ type, article, video, game, url }: Stru
       "@type": "WebSite",
       name: "Game Study Academy",
       url: baseUrl,
-      description: "YouTube動画から学ぶゲーム徹底攻略サイト。プロ実況者の知識とテクニックを文字で学習できます。",
+      description: "YouTube動画から学ぶゲーム徹底攻略サイト。実況者の知識とテクニックを文字で学習できます。",
       potentialAction: {
         "@type": "SearchAction",
         target: {

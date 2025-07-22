@@ -4,7 +4,7 @@ import { Article, Video, Game } from '@/types'
 // サイト基本情報
 const SITE_CONFIG = {
   name: 'Game Study Academy',
-  description: 'YouTube動画から学ぶゲーム徹底攻略サイト。プロ実況者の知識とテクニックを文字で学習できます。',
+  description: 'YouTube動画から学ぶゲーム徹底攻略サイト。実況者の知識とテクニックを文字で学習できます。',
   url: 'https://game-study-academy.com',
   ogImage: '/og-image.jpg', // 将来実装
   twitterHandle: '@game_study_academy', // 将来実装
@@ -25,7 +25,7 @@ export function generateDefaultMetadata(): Metadata {
       'ナイトレイン',
       'Nightreign',
       '動画解説',
-      'プロ実況者',
+      '実況者',
       '攻略法',
       'テクニック'
     ],
@@ -229,7 +229,7 @@ export function generateCategoryMetadata(
 export function generateHomeMetadata(): Metadata {
   return {
     title: 'YouTube動画から学ぶゲーム徹底攻略',
-    description: 'Game Study Academy - プロ実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
+    description: 'Game Study Academy - 実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
     keywords: [
       'ゲーム攻略',
       'YouTube',
@@ -237,7 +237,7 @@ export function generateHomeMetadata(): Metadata {
       'ナイトレイン',
       'Nightreign',
       '動画解説',
-      'プロ実況者',
+      '実況者',
       '攻略サイト',
       'ゲーム学習'
     ],
@@ -247,7 +247,7 @@ export function generateHomeMetadata(): Metadata {
       url: SITE_CONFIG.url,
       siteName: SITE_CONFIG.name,
       title: 'YouTube動画から学ぶゲーム徹底攻略 | Game Study Academy',
-      description: 'プロ実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
+      description: '実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
       images: [
         {
           url: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
@@ -260,7 +260,7 @@ export function generateHomeMetadata(): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: 'YouTube動画から学ぶゲーム徹底攻略 | Game Study Academy',
-      description: 'プロ実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
+      description: '実況者の知識とテクニックを文字で学習。エルデンリング: ナイトレインの攻略法を厳選された動画から効率的に学べます。',
       images: [`${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`],
     },
     alternates: {

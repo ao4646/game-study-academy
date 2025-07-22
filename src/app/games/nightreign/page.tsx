@@ -152,7 +152,7 @@ async function getNightreignCategories(): Promise<Category[]> {
 export function generateMetadata(): Metadata {
   return {
     title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
+    description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、実況者の知識を文字で学習できます。',
     keywords: [
       'ナイトレイン',
       'Nightreign',
@@ -172,7 +172,7 @@ export function generateMetadata(): Metadata {
       url: 'https://game-study-academy.com/games/nightreign',
       siteName: 'Game Study Academy',
       title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
+      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、実況者の知識を文字で学習できます。',
       images: [
         {
           url: 'https://game-study-academy.com/og-image.jpg',
@@ -185,7 +185,7 @@ export function generateMetadata(): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: 'ナイトレイン (Nightreign) 攻略記事一覧 - Game Study Academy',
-      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、プロ実況者の知識を文字で学習できます。',
+      description: 'エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略記事一覧。YouTube動画から学ぶ戦術、キャラクター解説、ボス攻略など、実況者の知識を文字で学習できます。',
       images: ['https://game-study-academy.com/og-image.jpg'],
     },
     alternates: {
@@ -330,7 +330,7 @@ export default async function NightreignPage() {
               </div>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
                 エルデンリング：ナイトレイン（Elden Ring: Nightreign）の攻略情報を網羅。<br />
-                プロ実況者の動画から学ぶ戦術とテクニックを文字で効率的に学習しましょう。
+                実況者の動画から学ぶ戦術とテクニックを文字で効率的に学習しましょう。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
