@@ -55,7 +55,9 @@ const updateNews = [
     description: '新たなボス「メスメル」の攻略記事を追加。弱点攻撃の詳細解説や推奨装備について詳しく解説しています。',
     type: 'dlc',
     game: 'elden-ring',
-    link: '/games/elden-ring'
+    link: '/games/elden-ring',
+    featured: true,
+    image: 'https://img.youtube.com/vi/placeholder/maxresdefault.jpg'
   },
   {
     id: 2,
@@ -64,7 +66,9 @@ const updateNews = [
     description: '協力プレイ専用の新キャラクターが追加されました。各キャラクターの特性と使い方ガイドを更新中です。',
     type: 'update',
     game: 'nightreign',
-    link: '/games/nightreign'
+    link: '/games/nightreign',
+    featured: true,
+    image: 'https://img.youtube.com/vi/placeholder2/maxresdefault.jpg'
   },
   {
     id: 3,
@@ -73,7 +77,8 @@ const updateNews = [
     description: '複数ワード検索に対応し、検索結果数を増加しました。より効率的に記事を見つけられるようになりました。',
     type: 'site',
     game: null,
-    link: '/articles'
+    link: '/articles',
+    featured: false
   },
   {
     id: 4,
@@ -82,7 +87,8 @@ const updateNews = [
     description: '24本の新しいエリア攻略記事を追加。全エリアの完全攻略ガイドが完成しました。',
     type: 'content',
     game: 'elden-ring',
-    link: '/games/elden-ring/category10'
+    link: '/games/elden-ring/category10',
+    featured: false
   }
 ]
 
@@ -134,6 +140,60 @@ function UpdateCard({ update }: { update: any }) {
   const typeLabel = getUpdateTypeLabel(update.type)
   const gameIcon = getGameIcon(update.game)
 
+  // 注目記事（ゲーム関連）のスタイル
+  if (update.featured && (update.game === 'elden-ring' || update.game === 'nightreign')) {
+    const isEldenRing = update.game === 'elden-ring'
+    
+    return (
+      <Link href={update.link} className="block group">
+        <article className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+          <div className="relative aspect-video overflow-hidden">
+            <div className={`w-full h-full bg-gradient-to-r ${isEldenRing ? 'from-blue-600 to-blue-700' : 'from-purple-600 to-purple-700'} flex items-center justify-center`}>
+              <div className="text-center text-white">
+                <div className="text-6xl mb-4">{gameIcon}</div>
+                <h3 className="text-2xl font-bold mb-2">{isEldenRing ? 'エルデンリング' : 'ナイトレイン'}</h3>
+                <p className="text-lg opacity-90">最新アップデート情報</p>
+              </div>
+            </div>
+            <div className="absolute top-4 left-4">
+              <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">
+                🔥 重要情報
+              </span>
+            </div>
+            <div className="absolute top-4 right-4">
+              <span className="px-3 py-1 rounded-full text-sm font-medium border text-white bg-black bg-opacity-50">
+                {typeLabel}
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-3">
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${isEldenRing ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}>
+                {isEldenRing ? 'エルデンリング' : 'ナイトレイン'}
+              </span>
+              <span className="text-sm text-gray-500">
+                {new Date(update.date).toLocaleDateString('ja-JP')}
+              </span>
+            </div>
+            <h3 className={`text-xl font-bold text-gray-900 mb-3 group-hover:${isEldenRing ? 'text-blue-600' : 'text-purple-600'} transition-colors`}>
+              {update.title}
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              {update.description}
+            </p>
+            <div className={`inline-flex items-center ${isEldenRing ? 'text-blue-600 hover:text-blue-700' : 'text-purple-600 hover:text-purple-700'} font-medium transition-colors`}>
+              詳細を見る
+              <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+              </svg>
+            </div>
+          </div>
+        </article>
+      </Link>
+    )
+  }
+
+  // 通常の更新情報
   return (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="flex items-start justify-between mb-4">
@@ -237,15 +297,33 @@ export default async function UpdatesPage() {
 
         {/* メインコンテンツ */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* 更新情報一覧 */}
+          {/* 注目ゲーム情報 */}
+          {updateNews.some(update => update.featured) && (
+            <section className="mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                🔥 重要なゲーム情報
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {updateNews
+                  .filter(update => update.featured && (update.game === 'elden-ring' || update.game === 'nightreign'))
+                  .map((update) => (
+                    <UpdateCard key={update.id} update={update} />
+                  ))}
+              </div>
+            </section>
+          )}
+
+          {/* その他の更新情報 */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              📢 最新の更新情報 ({updateNews.length}件)
+              📢 その他の更新情報 ({updateNews.filter(update => !update.featured).length}件)
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {updateNews.map((update) => (
-                <UpdateCard key={update.id} update={update} />
-              ))}
+              {updateNews
+                .filter(update => !update.featured)
+                .map((update) => (
+                  <UpdateCard key={update.id} update={update} />
+                ))}
             </div>
           </section>
 
