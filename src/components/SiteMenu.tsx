@@ -81,31 +81,18 @@ export default function SiteMenu() {
         return
       }
 
-      // 各キーワードに対する検索条件を構築
-      const searchConditions = keywords.map(keyword => 
+      // 全キーワードでOR検索を実行し、その後クライアントサイドでAND条件を適用
+      const allKeywordConditions = keywords.map(keyword => 
         `title.ilike.%${keyword}%,seo_title.ilike.%${keyword}%,content.ilike.%${keyword}%`
-      )
-
-      // 複数ワードの場合はAND検索として処理
-      let searchQuery
-      if (keywords.length === 1) {
-        // 単一ワードの場合
-        searchQuery = `title.ilike.%${keywords[0]}%,seo_title.ilike.%${keywords[0]}%,content.ilike.%${keywords[0]}%`
-      } else {
-        // 複数ワードの場合：各ワードがいずれかのフィールドに含まれることを要求
-        const orConditions = keywords.map(keyword => 
-          `(title.ilike.%${keyword}%,seo_title.ilike.%${keyword}%,content.ilike.%${keyword}%)`
-        ).join(',')
-        searchQuery = orConditions
-      }
-
+      ).join(',')
+      
       const { data: articles, error } = await supabase
         .from('articles')
         .select('id, title, seo_title, content, created_at')
         .eq('published', true)
-        .or(searchQuery)
+        .or(allKeywordConditions)
         .order('created_at', { ascending: false })
-        .limit(20) // 結果数を20件に増加
+        .limit(100) // より多くの候補を取得してからフィルタ
 
       if (error) {
         console.error('検索エラー:', error)
@@ -124,7 +111,9 @@ export default function SiteMenu() {
         })
       }
 
-      setSearchResults(filteredArticles)
+      // 結果を20件に制限
+      const finalResults = filteredArticles.slice(0, 20)
+      setSearchResults(finalResults)
     } catch (error) {
       console.error('検索中にエラーが発生しました:', error)
     }
