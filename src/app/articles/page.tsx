@@ -216,23 +216,23 @@ function CategoryCard({ category, gameSlug, articleCount }: { category: Category
   const getHref = (categoryName: string) => {
     switch (categoryName) {
       case '夜の王攻略':
-        return '/categories/1'
+        return '/games/nightreign/boss-guide'
       case 'キャラ別解説':
-        return '/categories/2'
+        return '/games/nightreign/character-guide'
       case '戦術':
-        return '/strategies'
+        return '/games/nightreign/strategies'
       case '地変攻略':
-        return '/dungeons'
+        return '/games/nightreign/dungeons'
       case '小ネタ・裏技':
-        return '/tips'
+        return '/games/nightreign/tips'
       case '追憶関連':
-        return '/stories'
+        return '/games/nightreign/stories'
       case '考察系':
-        return '/analysis'
+        return '/games/nightreign/analysis'
       case '初心者向け':
-        return '/beginners'
+        return '/games/nightreign/beginners'
       default:
-        return `/categories/${category.id}`
+        return `games/elden-ring/category${category.id}`
     }
   }
 

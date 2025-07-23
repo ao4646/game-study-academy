@@ -328,23 +328,23 @@ function CategoryCard({ category }: { category: any }) {
   const getHref = (categoryName: string) => {
     switch (categoryName) {
       case '夜の王攻略':
-        return '/categories/1'
+        return '/games/nightreign/boss-guide'
       case 'キャラ別解説':
-        return '/categories/2'
+        return '/games/nightreign/character-guide'
       case '戦術':
-        return '/strategies'
+        return '/games/nightreign/strategies'
       case '地変攻略':
-        return '/dungeons'
+        return '/games/nightreign/dungeons'
       case '小ネタ・裏技':
-        return '/tips'
+        return '/games/nightreign/tips'
       case '追憶関連':
-        return '/stories'
+        return '/games/nightreign/stories'
       case '考察系':
-        return '/analysis'
+        return '/games/nightreign/analysis'
       case '初心者向け':
-        return '/beginners'
+        return '/games/nightreign/strategies'
       default:
-        return `/categories/${category.id}`
+        return `/games/elden-ring/category${category.id}`
     }
   }
 
@@ -367,10 +367,11 @@ function CategoryCard({ category }: { category: any }) {
 
 // メインコンポーネント
 export default async function HomePage() {
-  // 両ゲームの記事を取得
-  const [eldenRingArticles, nightreignArticles, allFeaturedArticles] = await Promise.all([
-    getFeaturedArticlesByGame(2, 3), // エルデンリング
-    getFeaturedArticlesByGame(1, 3), // ナイトレイン
+  // 3ゲームの記事を取得
+  const [eldenRingArticles, nightreignArticles, kirbyArticles, allFeaturedArticles] = await Promise.all([
+    getFeaturedArticlesByGame(2, 2), // エルデンリング
+    getFeaturedArticlesByGame(1, 2), // ナイトレイン
+    getFeaturedArticlesByGame(3, 2), // 星のカービィ ディスカバリー
     getAllFeaturedArticles(3) // 全体の注目記事（3列表示用）
   ])
 
@@ -392,26 +393,26 @@ export default async function HomePage() {
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
                 <span className="block mb-2">🎮 YouTube動画から学ぶゲーム徹底攻略</span>
-                <span className="block text-red-200">エルデンリング・ナイトレインの攻略情報を文字&動画で学習</span>
+                <span className="block text-red-200">様々なアクションゲームの攻略情報をyoutubeから学ぼう！</span>
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
-                  href="/articles"
-                  className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105 shadow-lg"
-                >
-                  📚 攻略記事を見る
-                </Link>
-                <Link
-                  href="/beginner"
+                  href="/games/elden-ring"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
                 >
-                  🔰 エルデンリング初心者ガイド
+                  ⚔️ エルデンリング攻略
                 </Link>
                 <Link
-                  href="/beginner/nightreign"
+                  href="/games/nightreign"
                   className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
                 >
-                  🌙 ナイトレイン初心者ガイド
+                  🌙 ナイトレイン攻略
+                </Link>
+                <Link
+                  href="/games/kirby-discovery"
+                  className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600"
+                >
+                  🌟 星のカービィディスカバリー攻略
                 </Link>
                 <Link
                   href="/updates"
@@ -468,7 +469,7 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* エルデンリングセクション */}
               <div>
                 <div className="text-center mb-6">
@@ -483,10 +484,10 @@ export default async function HomePage() {
                     ))}
                     <div className="text-center">
                       <Link
-                        href="/articles?game=elden-ring"
+                        href="/games/elden-ring"
                         className="inline-flex items-center text-red-600 hover:text-red-700 font-medium"
                       >
-                        エルデンリングの記事をもっと見る
+                        エルデンリング攻略へ
                         <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                         </svg>
@@ -514,10 +515,10 @@ export default async function HomePage() {
                     ))}
                     <div className="text-center">
                       <Link
-                        href="/articles?game=nightreign"
+                        href="/games/nightreign"
                         className="inline-flex items-center text-red-600 hover:text-red-700 font-medium"
                       >
-                        ナイトレインの記事をもっと見る
+                        ナイトレイン攻略へ
                         <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                         </svg>
@@ -527,6 +528,37 @@ export default async function HomePage() {
                 ) : (
                   <div className="text-center py-8 bg-gray-50 rounded-lg">
                     <p className="text-gray-600">ナイトレインの記事は準備中です</p>
+                  </div>
+                )}
+              </div>
+
+              {/* 星のカービィ ディスカバリーセクション */}
+              <div>
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">星のカービィ ディスカバリー</h3>
+                  <p className="text-gray-600">任天堂の3Dアクションゲーム</p>
+                </div>
+                
+                {kirbyArticles.length > 0 ? (
+                  <div className="space-y-4">
+                    {kirbyArticles.map((data) => (
+                      <FeaturedArticleCard key={data.article.id} data={data} />
+                    ))}
+                    <div className="text-center">
+                      <Link
+                        href="/games/kirby-discovery"
+                        className="inline-flex items-center text-red-600 hover:text-red-700 font-medium"
+                      >
+                        カービィ攻略へ
+                        <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 bg-gray-50 rounded-lg">
+                    <p className="text-gray-600">カービィの記事は準備中です</p>
                   </div>
                 )}
               </div>
@@ -573,28 +605,28 @@ export default async function HomePage() {
               🎮 今すぐゲーム攻略を始めよう！
             </h2>
             <p className="text-xl mb-8 leading-relaxed">
-              エルデンリング・ナイトレイン両方の攻略情報が満載。<br />
+              エルデンリング・ナイトレイン・星のカービィの攻略情報が満載。<br />
               実況者たちの技術を学んで、あなたのゲームスキルを次のレベルへ。<br />
               記事と動画を両方見ることで、クリエイターの皆さんも応援しよう！
             </p>
             <div className="flex flex-col lg:flex-row gap-4 justify-center items-center">
               <Link
-                href="/articles"
-                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105 whitespace-nowrap"
-              >
-                📚 記事一覧を見る
-              </Link>
-              <Link
-                href="/beginner"
+                href="/games/elden-ring"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
               >
-                🔰 エルデンリング初心者ガイド
+                ⚔️ エルデンリングの攻略情報
               </Link>
               <Link
-                href="/beginner/nightreign"
+                href="/games/nightreign"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
               >
-                🌙 ナイトレイン初心者ガイド
+                🌙 ナイトレインの攻略情報
+              </Link>
+              <Link
+                href="/games/kirby-discovery"
+                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-red-600 whitespace-nowrap"
+              >
+                🌟 カービィ攻略
               </Link>
               <Link
                 href="/updates"
@@ -626,7 +658,7 @@ export default async function HomePage() {
                 <h4 className="text-lg font-semibold mb-4">🌙 ナイトレイン</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li><Link href="/games/nightreign" className="hover:text-white transition-colors">📚 ナイトレイン記事一覧</Link></li>
-                  <li><Link href="/beginner/nightreign" className="hover:text-white transition-colors">🔰 ナイトレイン初心者ガイド</Link></li>
+                  <li><Link href="/games/nightreign" className="hover:text-white transition-colors">🌙 ナイトレイン攻略</Link></li>
                   <li><Link href="/categories/1" className="hover:text-white transition-colors">👑 夜の王攻略</Link></li>
                   <li><Link href="/categories/2" className="hover:text-white transition-colors">👤 キャラ別解説</Link></li>
                 </ul>
@@ -636,9 +668,19 @@ export default async function HomePage() {
                 <h4 className="text-lg font-semibold mb-4">⚔️ エルデンリング</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li><Link href="/games/elden-ring" className="hover:text-white transition-colors">📚 エルデンリング記事一覧</Link></li>
-                  <li><Link href="/beginner" className="hover:text-white transition-colors">🔰 エルデンリング初心者ガイド</Link></li>
+                  <li><Link href="/games/elden-ring" className="hover:text-white transition-colors">⚔️ エルデンリング攻略</Link></li>
                   <li><Link href="/articles?game=elden-ring" className="hover:text-white transition-colors">🗺️ エリア攻略</Link></li>
                   <li><Link href="/articles?game=elden-ring" className="hover:text-white transition-colors">⚔️ ボス攻略</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-semibold mb-4">🌟 星のカービィ</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/games/kirby-discovery" className="hover:text-white transition-colors">📚 カービィ記事一覧</Link></li>
+                  <li><Link href="/games/kirby-discovery/basics" className="hover:text-white transition-colors">🎮 基本操作ガイド</Link></li>
+                  <li><Link href="/games/kirby-discovery/bosses" className="hover:text-white transition-colors">👹 ボス攻略</Link></li>
+                  <li><Link href="/games/kirby-discovery/secrets" className="hover:text-white transition-colors">💎 隠し要素</Link></li>
                 </ul>
               </div>
               
@@ -659,7 +701,7 @@ export default async function HomePage() {
                   </p>
                 </div>
                 <div className="flex items-center space-x-4 text-sm text-gray-400">
-                  <span>🎮 エルデンリング・ナイトレイン専門</span>
+                  <span>🎮 エルデンリング・ナイトレイン・カービィ専門</span>
                   <span>•</span>
                   <span>📺 YouTube動画から学習</span>
                 </div>

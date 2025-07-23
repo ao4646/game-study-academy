@@ -343,32 +343,25 @@ export default function SiteMenu() {
                     📚 記事一覧ページへ
                   </Link>
                   <Link
-                    href="/beginner"
-                    onClick={() => setIsOpen(false)}
-                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
-                  >
-                    🔰 エルデンリング初心者ガイド
-                  </Link>
-                  <Link
                     href="/games/elden-ring"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
                   >
-                    ⚔️ エルデンリングの記事一覧
-                  </Link>
-                  <Link
-                    href="/beginner/nightreign"
-                    onClick={() => setIsOpen(false)}
-                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
-                  >
-                    🌙 ナイトレイン初心者ガイド
+                    ⚔️ エルデンリング攻略
                   </Link>
                   <Link
                     href="/games/nightreign"
                     onClick={() => setIsOpen(false)}
                     className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
                   >
-                    🌙 ナイトレインの記事一覧
+                    🌙 ナイトレイン攻略
+                  </Link>
+                  <Link
+                    href="/games/kirby-discovery"
+                    onClick={() => setIsOpen(false)}
+                    className="block p-3 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    🌟 星のカービィディスカバリー攻略
                   </Link>
                   <Link
                     href="/admin"
